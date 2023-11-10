@@ -66,33 +66,6 @@ def ft_is_matrix(var):
         return True
     return False
 
-def evaluate_expression(expression):
-    global variables
-    # Replace variable names with their values
-    for var in variables:
-        expression = re.sub(r'\b' + var + r'\b', str(variables[var]), expression)
-    # Evaluate the expression
-    result = eval(expression)
-    return result
-
-def ft_is_function(var):
-    print("Inside is function")
-    global variables
-
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-
-    variable = parts[0].strip()
-    expression = parts[1].strip()
-    # Check if it's a function definition
-    if '(' in variable and ')' in variable:
-        function, parameters = variable.split('(')
-        parameters = parameters.replace(')', '').strip()
-        variables[function.strip()] = lambda *args: evaluate_expression(expression.format(*args))
-    else:
-        variables[variable] = evaluate_expression(expression)
-
 
 def ft_save_imaginary(var):
     print("Save imaginary")
@@ -105,6 +78,11 @@ def ft_save_matrix(var):
 
 def ft_save_function(var):
     print("Save function")
+    parts = var.split('=')
+    if len(parts) != 2:
+        raise ValueError("Error in format")
+    variable = parts[0].strip()
+    expression = parts[1].strip()
 
 def ft_save_variable(var):
     if ft_is_rational_numer(var):
@@ -113,7 +91,7 @@ def ft_save_variable(var):
         ft_save_imaginary(var)
     elif ft_is_matrix(var):
         ft_save_matrix(var)
-    elif ft_is_function(var):
+    else:
         ft_save_function(var)
 
 def ft_process_statement(statement):
