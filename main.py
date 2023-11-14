@@ -4,6 +4,7 @@ from rational import *
 from imaginary import *
 from matrix import *
 from function import *
+from aux import *
 
 variables = {}
 
@@ -15,12 +16,6 @@ def ft_check_statement(statement):
             sys.exit(-1)
     except error as e:
         print("Error\n", e)
-
-def ft_is_variable(var):
-    var2 = var.split('=')
-    if len(var2) == 2:
-        return (True)
-    return (False)
 
 def ft_save_variable(var):
     if ft_is_rational_numer(var):
