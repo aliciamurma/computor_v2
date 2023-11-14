@@ -1,3 +1,4 @@
+from library import *
 
 def ft_save_function(var):
     print("Save function")

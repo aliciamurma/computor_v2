@@ -5,6 +5,7 @@ from imaginary import *
 from matrix import *
 from function import *
 from aux import *
+from library import *
 
 variables = {}
 

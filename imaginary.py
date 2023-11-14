@@ -1,3 +1,5 @@
+from library import *
+
 def ft_save_imaginary(var):
     print("Save imaginary")
 

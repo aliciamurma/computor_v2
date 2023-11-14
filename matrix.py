@@ -1,4 +1,6 @@
 
+from library import *
+
 def ft_is_matrix(var):
     print("Inside is matrix")
     if var.startswith("[[") and var.endswith("]]"):
