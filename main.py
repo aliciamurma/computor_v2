@@ -1,88 +1,26 @@
 import sys
 import re
+from rational import *
+from imaginary import *
+from matrix import *
+from function import *
 
 variables = {}
 
 def ft_check_statement(statement):
-    var2 = statement.split('=')
-    if len(var2) != 2:
-        print("Error in syntax")
-        sys.exit(-1)
+    try:
+        var2 = statement.split('=')
+        if len(var2) != 2:
+            print("Error in syntax")
+            sys.exit(-1)
+    except error as e:
+        print("Error\n", e)
 
 def ft_is_variable(var):
     var2 = var.split('=')
     if len(var2) == 2:
         return (True)
     return (False)
-
-def ft_is_rational_numer(var):
-    print("Inside is rational")
-    var2 = var.split('=')
-    if len(var2) != 2:
-        return (False)
-    right_side = var2[1].strip()  # Elimina espacios en blanco alrededor
-    if right_side.isdigit():
-        return (True)
-    return (False)
-
-def ft_is_imaginary(var):
-    print("Inside is imaginary")
-    var = var.split('=')
-    if len(var) != 2:
-        return (False)
-    partes = var[1].replace(" ", "").split('i')
-
-    print("partes is: ", len(partes))
-    if len(partes) == 2:
-        real = partes[0].strip()
-        imaginary = partes[1].strip()
-        try:
-            if real.isdigit() or (real[0] == '-' and real[1:].isdigit()):
-                float(imaginary)
-                return (True)
-            else:
-                float(real)
-                float(imaginary)
-            return True
-        except ValueError:
-            return False
-    return False
-
-def ft_is_matrix(var):
-    print("Inside is matrix")
-    if var.startswith("[[") and var.endswith("]]"):
-        filas = var[2:-2].split("];[") #Separate by ;
-        el_first_row = filas[0].count(',') + 1
-        for fila in filas:
-            if fila.count(',') + 1 != el_first_row:
-                return False
-        for fila in filas:
-                elementos = fila.split(',')
-        for elem in elementos:
-            try:
-                float(elem)
-            except ValueError:
-                return False
-        return True
-    return False
-
-
-def ft_save_imaginary(var):
-    print("Save imaginary")
-
-def ft_save_rational(var):
-    print("Save rational")
-
-def ft_save_matrix(var):
-    print("Save matrix")
-
-def ft_save_function(var):
-    print("Save function")
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    variable = parts[0].strip()
-    expression = parts[1].strip()
 
 def ft_save_variable(var):
     if ft_is_rational_numer(var):
