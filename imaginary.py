@@ -25,8 +25,39 @@ def ft_get_imaginary(var):
         return nbr_i * signo
     return 0
 
+def ft_get_imaginary_and_real(var):
+    # Patrón de expresión regular para buscar coeficientes imaginarios y reales
+    coincidence = re.search(r'([-+]?\s*\d*)i\s*([-+]?\s*\d*)', var)
+    if coincidence:
+        nbr_i = coincidence.group(1) # Obtener el coeficiente imaginario
+        # Si no hay o solo tiene un signo, asignarle 1
+        if not nbr_i or nbr_i == '+' or nbr_i == '-':
+            nbr_i = '1'
+        # Si el coeficiente es '-' sin dígito, asignarle -1
+        elif nbr_i == '-':
+            nbr_i = '-1'
+        # Eliminar espacios en blanco y convertir el coeficiente a un número
+        nbr_i = int(nbr_i.replace(' ', ''))
+        real_part = coincidence.group(2)
+
+        # Si el componente real es vacío o solo tiene un signo, asignarle 0
+        if not real_part or real_part == '+' or real_part == '-':
+            real_part = '0'      
+        # Eliminar espacios en blanco y convertir el componente real a un número
+        real_part = int(real_part.replace(' ', ''))
+        signo = -1 if var[0] == '-' else 1
+        return {"real": real_part, "imaginary": nbr_i * signo}
+    # Si no se encuentra ninguna coincidencia, el componente real e imaginario son ambos 0
+    return {"real": 0, "imaginary": 0}
+
 def ft_print_imaginary(var):
-    print(ft_get_imaginary(var), "i")
+    result = ft_get_imaginary_and_real(var)
+    print(f"{result['real']}", end=' ')
+    if result['imaginary'] < 0:
+        print('-', end=' ')
+    else:
+        print('+', end=' ')
+    print(f"{abs(result['imaginary'])}i")
 
 def ft_save_imaginary(var):
     print("Save imaginary")
