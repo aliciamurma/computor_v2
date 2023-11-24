@@ -47,6 +47,7 @@ def main(argv):
             ft_start()
     except error as e:
         print("Error\n", e);
+        sys.exit()
 
 if __name__ == '__main__':
     argv = sys.argv
