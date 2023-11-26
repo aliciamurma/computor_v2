@@ -8,18 +8,14 @@ def ft_get_imaginary(var):
     if coincidence:
         # Obtener el coeficiente imaginario
         nbr_i = coincidence.group(1)
-        
         # Si el coeficiente es vacío o solo tiene un signo, asignarle 1
         if not nbr_i or nbr_i == '+' or nbr_i == '-':
             nbr_i = '1'
-        
         # Si el coeficiente es '-' sin dígito, asignarle -1
         elif nbr_i == '-':
             nbr_i = '-1'
-        
         # Eliminar espacios en blanco y convertir el coeficiente a un número
         nbr_i = int(nbr_i.replace(' ', ''))
-        
         # Verificar el signo
         signo = -1 if var[0] == '-' else 1
         return nbr_i * signo
@@ -70,21 +66,20 @@ def ft_is_imaginary(var):
     print("Inside is imaginary")
     var = var.split('=')
     if len(var) != 2:
-        return (False)
+        return False
     partes = var[1].replace(" ", "").split('i')
 
-    print("partes is: ", len(partes))
     if len(partes) == 2:
         real = partes[0].strip()
         imaginary = partes[1].strip()
         try:
-            if real.isdigit() or (real[0] == '-' and real[1:].isdigit()):
-                float(imaginary)
-                return (True)
+            if (real.isdigit() or
+                    (real[0] == '-' and real[1:].isdigit())) and (imaginary.isdigit() or
+                                                                 (imaginary[0] == '-' and imaginary[1:].isdigit())):
+                return True
             else:
-                float(real)
-                float(imaginary)
-            return True
+                return False
         except ValueError:
+            print("except")
             return False
     return False

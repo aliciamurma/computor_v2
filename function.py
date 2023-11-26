@@ -1,6 +1,8 @@
 from library import *
 from aux import *
 
+def ft_operate_parenthesis(var):
+    print("Operateparenthesis")
 
 # 1 ()
 # 2 ^
