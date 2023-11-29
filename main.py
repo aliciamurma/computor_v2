@@ -33,6 +33,8 @@ def ft_process_statement(statement):
     ft_check_statement(statement)
     if (ft_is_variable(statement)):
         ft_save_variable(statement)
+    else:
+        print("I don't understand it")
 
 def ft_start():
     while True:

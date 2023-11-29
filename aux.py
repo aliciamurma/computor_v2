@@ -54,4 +54,18 @@ def ft_is_parenthesis_open(spaces):
             if '(' in element:
                 return True  
     return False
-    
+
+def ft_suma(a, b):
+    return a + b
+
+def ft_resta(a, b):
+    return a - b
+
+def ft_multiplicacion(a, b):
+    return a * b
+
+def ft_division(a, b):
+    if b != 0:
+        return a / b
+    else:
+        return "Error: No se puede dividir por cero."
