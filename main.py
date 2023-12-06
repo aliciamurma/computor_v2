@@ -14,9 +14,13 @@ def ft_check_statement(statement):
         var2 = statement.split('=')
         if len(var2) != 2:
             print("Error in syntax")
-            sys.exit(-1)
-    except error as e:
-        print("Error\n", e)
+            return (False)
+        if len(var2[0]) != 2:
+            print("Error in syntax")
+            return (False)
+    except:
+        print("Error 2\n")
+    return (True)
 
 def ft_save_variable(var):
     if ft_is_rational_numer(var):
@@ -29,26 +33,27 @@ def ft_save_variable(var):
         ft_save_function(var)
 
 def ft_process_statement(statement):
-    print("Before check")
-    ft_check_statement(statement)
-    if (ft_is_variable(statement)):
+    if ft_check_statement(statement):
         ft_save_variable(statement)
     else:
         print("I don't understand it")
 
 def ft_start():
-    while True:
-        prompt = input("Enter a statement: ")
-        while not prompt:
+    try:
+        while True:
             prompt = input("Enter a statement: ")
-        ft_process_statement(prompt)
+            while not prompt:
+                prompt = input("Enter a statement: ")
+            ft_process_statement(prompt)
+    except:
+        print("I don't think that a calculator can do it...")
+
 
 def main(argv):
-    try:
-        if len(argv) == 1:
-            ft_start()
-    except error as e:
-        print("Error\n", e);
+    if len(argv) == 1:
+        ft_start()
+    else:
+        print("Error")
         sys.exit()
 
 if __name__ == '__main__':

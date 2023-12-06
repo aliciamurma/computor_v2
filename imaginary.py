@@ -67,15 +67,26 @@ def ft_is_imaginary(var):
     var = var.split('=')
     if len(var) != 2:
         return False
-    partes = var[1].replace(" ", "").split('i')
+    x = var[1].find("i")
+    print("X ES: ", x, "LA ULT POS ES: ", len(var[1]))
+    if (x != len(var[1]) -1):
+        partes = var[1].replace(" ", "").split('i')
+    if (x == len(var[1]) -1 and var[x -2] == '*'):
+        partes = var[1].replace(" ", "").split('i')
+    else:
+        print("ESTOY EN ULTIMA PSOICION!")
+    print("PARTES IS: ",  x)
 
     if len(partes) == 2:
         real = partes[0].strip()
         imaginary = partes[1].strip()
+        print("The real len is: ", len(real))
+        #  and real[len(real)] == '*') or (real[0] == '-' and real[1:len(real)-1].isdigit() and real[len(real)] == '*')
         try:
-            if (real.isdigit() or
+            if (real.isdigit() or (real[:1].isdigit())
                     (real[0] == '-' and real[1:].isdigit())) and (imaginary.isdigit() or
                                                                  (imaginary[0] == '-' and imaginary[1:].isdigit())):
+                print("INSIDE")
                 return True
             else:
                 return False

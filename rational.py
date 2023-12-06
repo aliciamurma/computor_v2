@@ -1,7 +1,6 @@
 from library import *
 from aux import *
 
-
 def ft_save_rational(var):
     var2 = var.split('=')
     new_var = MyVar(var2[0], var2[1])
