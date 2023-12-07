@@ -22,32 +22,42 @@ def ft_get_imaginary(var):
     return 0
 
 def ft_get_imaginary_and_real(var):
+    print("MYYY V AR ES: ", var)
+    '''
     # Patrón de expresión regular para buscar coeficientes imaginarios y reales
-    coincidence = re.search(r'([-+]?\s*\d*)i\s*([-+]?\s*\d*)', var)
-    if coincidence:
-        nbr_i = coincidence.group(1) # Obtener el coeficiente imaginario
-        # Si no hay o solo tiene un signo, asignarle 1
-        if not nbr_i or nbr_i == '+' or nbr_i == '-':
-            nbr_i = '1'
-        # Si el coeficiente es '-' sin dígito, asignarle -1
-        elif nbr_i == '-':
-            nbr_i = '-1'
-        # Eliminar espacios en blanco y convertir el coeficiente a un número
-        nbr_i = int(nbr_i.replace(' ', ''))
-        real_part = coincidence.group(2)
+    coincidence = re.search(r'\s*([-+]?\s*\d*)\s*i\s*([-+]?\s*\d*)\s*|\s*([-+]?\s*\d+)\s*([-+]?\s*\d*)\s*i\s*', var)
 
-        # Si el componente real es vacío o solo tiene un signo, asignarle 0
-        if not real_part or real_part == '+' or real_part == '-':
-            real_part = '0'      
-        # Eliminar espacios en blanco y convertir el componente real a un número
+    if coincidence:
+        real_part_1, imaginary_part_1, real_part_2, imaginary_part_2 = coincidence.groups()
+
+        if imaginary_part_1 is not None:
+            real_part, imaginary_part = real_part_1.strip(), imaginary_part_1.strip()
+        elif imaginary_part_2 is not None:
+            real_part, imaginary_part = real_part_2.strip(), imaginary_part_2.strip()
+        else:
+            # No debería llegar aquí si la expresión está bien diseñada
+            return {"real": 0, "imaginary": 0}
+
+        # Si la parte imaginaria está vacía, asignarle 0
+        imaginary_part = imaginary_part if imaginary_part else '0'
+
+        # Eliminar espacios en blanco y convertir a enteros
         real_part = int(real_part.replace(' ', ''))
+        imaginary_part = int(imaginary_part.replace(' ', ''))
+
+        # Ajustar el signo en función del primer carácter
         signo = -1 if var[0] == '-' else 1
-        return {"real": real_part, "imaginary": nbr_i * signo}
-    # Si no se encuentra ninguna coincidencia, el componente real e imaginario son ambos 0
+
+        # Devolver las partes real e imaginaria
+        return {"real": real_part, "imaginary": imaginary_part * signo}
+
+    # Si no hay coincidencia, devolver ambas partes como 0
+    '''
     return {"real": 0, "imaginary": 0}
 
 def ft_print_imaginary(var):
     result = ft_get_imaginary_and_real(var)
+    print("RESULT: ", result )
     print(f"{result['real']}", end=' ')
     if result['imaginary'] < 0:
         print('-', end=' ')
@@ -56,7 +66,7 @@ def ft_print_imaginary(var):
     print(f"{abs(result['imaginary'])}i")
 
 def ft_save_imaginary(var):
-    print("Save imaginary")
+    print("Save imaginary: ", var)
     var2 = var.split('=')
     new_var = MyVar(var2[0], var2[1])
     variables[var2[0]] = new_var  # Add the new variable to the 'variables' dictionary
@@ -67,19 +77,15 @@ def ft_is_imaginary(var):
     var = var.split('=')
     if len(var) != 2:
         return False
-    print("VAR IS: ", var[1], "AND LAST POS: ", var[1][-1])
     if var[1][-1] == 'i':
-        print("LAST POS!")
         partes = parts = re.split(r'[-+]', var[1])
     else:
-        print("NO LAST POS!")
         partes = var[1].replace(" ", "").split('i')
 
     if len(partes) == 2:
         last_pos = 0
         real = partes[0].strip()
         imaginary = partes[1].strip()
-        print("IN last pos is: ", imaginary)
         if imaginary[-1] is 'i':
             last_pos = 1
         try:
