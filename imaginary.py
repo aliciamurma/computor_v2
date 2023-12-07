@@ -67,26 +67,28 @@ def ft_is_imaginary(var):
     var = var.split('=')
     if len(var) != 2:
         return False
-    x = var[1].find("i")
-    print("X ES: ", x, "LA ULT POS ES: ", len(var[1]))
-    if (x != len(var[1]) -1):
-        partes = var[1].replace(" ", "").split('i')
-    if (x == len(var[1]) -1 and var[x -2] == '*'):
-        partes = var[1].replace(" ", "").split('i')
+    print("VAR IS: ", var[1], "AND LAST POS: ", var[1][-1])
+    if var[1][-1] == 'i':
+        print("LAST POS!")
+        partes = parts = re.split(r'[-+]', var[1])
     else:
-        print("ESTOY EN ULTIMA PSOICION!")
-    print("PARTES IS: ",  x)
+        print("NO LAST POS!")
+        partes = var[1].replace(" ", "").split('i')
 
     if len(partes) == 2:
+        last_pos = 0
         real = partes[0].strip()
         imaginary = partes[1].strip()
-        print("The real len is: ", len(real))
-        #  and real[len(real)] == '*') or (real[0] == '-' and real[1:len(real)-1].isdigit() and real[len(real)] == '*')
+        print("IN last pos is: ", imaginary)
+        if imaginary[-1] is 'i':
+            last_pos = 1
         try:
-            if (real.isdigit() or (real[:1].isdigit())
-                    (real[0] == '-' and real[1:].isdigit())) and (imaginary.isdigit() or
-                                                                 (imaginary[0] == '-' and imaginary[1:].isdigit())):
-                print("INSIDE")
+            if last_pos == 1:
+                if (real.replace("-", "").replace("+", "").isdigit() and
+                    (imaginary.replace("-", "").replace("+", "").isdigit() or
+                    (imaginary[-1] == 'i') and imaginary[:1].replace("-", "").replace("*", "").replace("+", "").isdigit())):
+                    return True
+            elif (real.replace("-", "").replace("+", "").isdigit() and imaginary.replace("-", "").replace("+", "").isdigit()):
                 return True
             else:
                 return False
