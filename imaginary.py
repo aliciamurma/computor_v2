@@ -25,8 +25,6 @@ def ft_get_imaginary_and_real(var):
     print("INSIDE GET")
     aux = var.split()
     if var[-1] == 'i': # el numero imaginario es el ultimo parametro
-        print("var-1 es i ")
-        print("aux :-2 es: ", aux[:-1], "imaginary: ", aux[-2:])
         return {"real": aux[:-2], "imaginary": aux[-2:]}
     return {"real": aux[-2:], "imaginary": aux[:-2]}
 
@@ -67,7 +65,7 @@ def ft_is_imaginary(var):
     try:
         if (real.replace("-", "").replace("+", "").isdigit() and
             (imaginary.replace("-", "").replace("+", "").isdigit() or
-            (imaginary[-1] == 'i') and imaginary[:-1].replace("-", "").replace("+", "").isdigit())):
+            (imaginary[-1] == 'i') and imaginary[:-1].replace("-", "").replace("+", "").replace("*", "").isdigit())):
             return True
         else:
             return False
