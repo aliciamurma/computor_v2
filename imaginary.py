@@ -74,35 +74,3 @@ def ft_is_imaginary(var):
     except ValueError:
         print("except")
         return False
-'''
-def ft_is_imaginary(var):
-    print("Inside is imaginary")
-    var = var.split('=')
-    if len(var) != 2:
-        return False
-    if var[1][-1] == 'i':
-        partes = parts = re.split(r'[-+]', var[1])
-    else:
-        partes = var[1].replace(" ", "").split('i')
-
-    if len(partes) == 2:
-        last_pos = 0
-        real = partes[0].strip()
-        imaginary = partes[1].strip()
-        if imaginary[-1] is 'i':
-            last_pos = 1
-        try:
-            if last_pos == 1:
-                if (real.replace("-", "").replace("+", "").isdigit() and
-                    (imaginary.replace("-", "").replace("+", "").isdigit() or
-                    (imaginary[-1] == 'i') and imaginary[:1].replace("-", "").replace("*", "").replace("+", "").isdigit())):
-                    return True
-            elif (real.replace("-", "").replace("+", "").isdigit() and imaginary.replace("-", "").replace("+", "").replace("*", "").isdigit()):
-                return True
-            else:
-                return False
-        except ValueError:
-            print("except")
-            return False
-    return False
-'''
