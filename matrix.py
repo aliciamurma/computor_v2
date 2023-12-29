@@ -1,5 +1,6 @@
 
 from library import *
+from aux import ft_find_variable
 
 def ft_is_matrix(var):
     parts = var.split('=')
@@ -49,11 +50,8 @@ def ft_save_matrix(var):
         raise ValueError("Error in format")
     print("VAR IS: ", parts[0], " ", parts[1])
     name = parts[0].strip()
-    value = float(parts[1].strip()) # convierte cadena en objeto
+    value = parts[1].strip() # convierte cadena en objeto
     new_var = MyVar(name, value)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
-    print("We have saved: ", variables[name])
-    ft_find_variable(variables, name)
-    # print(ft_find_variable(variables, name))
-    print("\n\n")
+    #ft_find_variable(variables, name)
     ft_print_matrix(var)

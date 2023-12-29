@@ -17,7 +17,6 @@ def ft_find_variable(dictionary, name):
 def ft_find_variable(dictionary, name):
     for value in dictionary.values():
         if value is not None and value.name == name:
-            print("Found!!")
             return value
     return None
 
