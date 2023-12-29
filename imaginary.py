@@ -1,4 +1,5 @@
 from library import *
+from aux import ft_find_variable
 import re
 
 

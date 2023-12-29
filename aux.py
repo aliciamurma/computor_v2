@@ -1,19 +1,3 @@
-'''
-def ft_find_variable(dictionary, name):
-    print("DONT ENTER IN FOR")
-    for clave, value in dictionary.items():
-        print("IN ONE FOR")
-        if value is not None:  # Check if value is not None before accessing its attributes
-            if value.name == name:
-                print("Finded!!")
-                return value  # Retorna la instancia de MyVar si se encuentra el nombre
-    return None 
-
-
-def ft_find_variable(dictionary, name):
-    return variables.get(name, None)
-'''
-
 def ft_find_variable(dictionary, name):
     for value in dictionary.values():
         if value is not None and value.name == name:
