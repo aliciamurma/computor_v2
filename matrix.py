@@ -33,7 +33,7 @@ def ft_print_matrix(var):
     expression = parts[1].strip()
     # Dividir cadena en listas de números
     rows = [list(map(int, row.strip('[]').split(','))) for row in expression.split(';')]
-    
+
     # Imprimir la matriz
     for row in rows:
         print("[", end=" ")
@@ -49,7 +49,7 @@ def ft_save_matrix(var):
         raise ValueError("Error in format")
     print("VAR IS: ", parts[0], " ", parts[1])
     name = parts[0].strip()
-    value = eval(parts[1].strip()) # convierte cadena en objeto
+    value = float(parts[1].strip()) # convierte cadena en objeto
     new_var = MyVar(name, value)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     print("We have saved: ", variables[name])

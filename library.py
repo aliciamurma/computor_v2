@@ -1,3 +1,4 @@
+import numpy as np
 c_real = 0
 c_imag = 0
 

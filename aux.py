@@ -1,3 +1,4 @@
+'''
 def ft_find_variable(dictionary, name):
     print("DONT ENTER IN FOR")
     for clave, value in dictionary.items():
@@ -7,11 +8,18 @@ def ft_find_variable(dictionary, name):
                 print("Finded!!")
                 return value  # Retorna la instancia de MyVar si se encuentra el nombre
     return None 
-'''
+
 
 def ft_find_variable(dictionary, name):
     return variables.get(name, None)
 '''
+
+def ft_find_variable(dictionary, name):
+    for value in dictionary.values():
+        if value is not None and value.name == name:
+            print("Found!!")
+            return value
+    return None
 
 def ft_is_sum(spaces):
     for element in spaces:
