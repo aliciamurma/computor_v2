@@ -53,12 +53,9 @@ def ft_is_imaginary(var):
     var = var.split('=')
     if len(var) != 2:
         return False
-
-    print("0")
     parts = re.split(r'[-+]', var[1])
     if len(parts) != 2:
         return False
-    print("2")
     
     if var[1][-1] == 'i':
         real = parts[0].strip()
@@ -75,5 +72,5 @@ def ft_is_imaginary(var):
         else:
             return False
     except ValueError:
-        print("except")
+        print("No me gusta ese imaginario")
         return False

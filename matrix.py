@@ -3,6 +3,7 @@ from library import *
 from aux import ft_find_variable
 
 def ft_is_matrix(var):
+    print("Inside is matrix")
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
@@ -48,7 +49,6 @@ def ft_save_matrix(var):
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
-    print("VAR IS: ", parts[0], " ", parts[1])
     name = parts[0].strip()
     value = parts[1].strip() # convierte cadena en objeto
     new_var = MyVar(name, value)

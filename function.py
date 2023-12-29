@@ -85,14 +85,35 @@ def ft_operate(expression):
 # 4 + -
 def ft_expression(var):
     print("VAR IS: ",var)
-    spaces = var.split(' ')
-    print("THE RESULT IS: ", ft_operate(var))
 
-def ft_save_function(var):
-    print("Save function")
+
+def one_letter(expression):
+    letters = filter(str.isalpha, expression.lower())
+    n_letters = set(letters)
+    return len(n_letters)
+
+def ft_is_function(var):
+    print("Inside function")
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
     variable = parts[0].strip()
     expression = parts[1].strip()
-    ft_expression(expression)
+    if one_letter(expression) != 1:
+        return False
+    
+    # Find the variable dynamically
+    variables = [c for c in expression if c.isalpha()]
+    if not variables:
+        return False
+    
+    variable = variables[0]  # Take the first letter found as the variable
+    parameters = expression.split(variable)[1].split(":")[0]
+    parameters = parameters.strip("()")
+    num_parameters = len(parameters.split(","))  # Count the number of parameters
+    return num_parameters > 0  # Verificar si hay al menos un parámetro
+    return False
+    #ft_expression(expression)
+
+def ft_save_function(var):
+    print("FUCK")
