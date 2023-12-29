@@ -44,4 +44,16 @@ def ft_print_matrix(var):
 
 def ft_save_matrix(var):
     print("Save matrix")
+    parts = var.split('=')
+    if len(parts) != 2:
+        raise ValueError("Error in format")
+    print("VAR IS: ", parts[0], " ", parts[1])
+    name = parts[0].strip()
+    value = eval(parts[1].strip()) # convierte cadena en objeto
+    new_var = MyVar(name, value)
+    variables[name] = new_var  # Add the new variable to the 'variables' dictionary
+    print("We have saved: ", variables[name])
+    ft_find_variable(variables, name)
+    # print(ft_find_variable(variables, name))
+    print("\n\n")
     ft_print_matrix(var)

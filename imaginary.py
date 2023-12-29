@@ -53,7 +53,11 @@ def ft_is_imaginary(var):
     if len(var) != 2:
         return False
 
+    print("0")
     parts = re.split(r'[-+]', var[1])
+    if len(parts) != 2:
+        return False
+    print("2")
     
     if var[1][-1] == 'i':
         real = parts[0].strip()

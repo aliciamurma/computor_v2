@@ -13,10 +13,7 @@ def ft_check_statement(statement):
     try:
         var2 = statement.split('=')
         if len(var2) != 2:
-            print("Error in syntax")
-            return (False)
-        if len(var2[0]) != 2:
-            print("Error in syntax")
+            print("Error in syntax 1")
             return (False)
     except:
         print("Error 2\n")
@@ -42,8 +39,10 @@ def ft_start():
     try:
         while True:
             prompt = input("Enter a statement: ")
+            prompt = prompt.replace(' ','')
             while not prompt:
                 prompt = input("Enter a statement: ")
+                prompt = prompt.replace(' ','')
             ft_process_statement(prompt)
     except:
         print("I don't think that a calculator can do it...")
