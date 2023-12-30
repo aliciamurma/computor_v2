@@ -6,6 +6,7 @@ from matrix import *
 from function import *
 from aux import *
 from library import *
+from operations import *
 
 variables = {}
 
@@ -27,10 +28,9 @@ def ft_save_variable(var):
     elif ft_is_matrix(var):
         ft_save_matrix(var)
     elif ft_is_function(var):
-        print("LETS GO TO SAVE THE FUNCTION!")
         ft_save_function(var)
     else:
-        print("I DO NOT UNDERSTAND U")
+        ft_operate(var)
 
 def ft_process_statement(statement):
     if ft_check_statement(statement):
