@@ -53,6 +53,8 @@ def ft_is_imaginary(var):
     var = var.split('=')
     if len(var) != 2:
         return False
+    if var[1].find("i") is -1:
+        return False
     parts = re.split(r'[-+]', var[1])
     if len(parts) != 2:
         return False

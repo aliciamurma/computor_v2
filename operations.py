@@ -11,12 +11,14 @@ def ft_operate_numeric(expression):
     while i < len(expression):
         if expression[i].isdigit() or (i < len(expression) - 1 and expression[i] == '-' and expression[i + 1].isdigit()):
             # Extraer números (manejar números negativos)
+            print("INSIDE FIRST IF")
             inicio = i
             while i < len(expression) and (expression[i].isdigit() or expression[i] == '.'):
                 i += 1
             operandos.append(float(expression[inicio:i]))
 
         elif expression[i] in "+-*/":
+            print("INSIDE SECOND IF")
             # Manejar operadores
             while operadores and operadores[-1] in "*/" and (expression[i] in "+-"):
                 operador = operadores.pop()
@@ -108,13 +110,14 @@ def ft_operate(var):
     if len(parts) != 2:
         raise ValueError("Error in format")
     name = parts[0].strip()
-    value = parts[1].strip() 
+    value = parts[1].strip()
+
     separated = ft_separate(value)
-    print(separated)
     replaced = ft_replace_variables(separated)
-    print("REPLACED: ", replaced)
     if ft_isletter(replaced) is False:
         print("Inside one letter")
         print("result: ", ft_operate_numeric(replaced))
+'''
     else:
         print("I cannot do that operation")
+'''
