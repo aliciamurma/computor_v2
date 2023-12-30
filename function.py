@@ -33,9 +33,10 @@ def ft_get_coeficients2(input):
         raise ValueError("Invalid format")
 
 
-def one_letter(expression):
+def ft_one_letter(expression):
     letters = filter(str.isalpha, expression.lower())
     n_letters = set(letters)
+    print("NUMBER OF LETTERS: ", n_letters)
     return len(n_letters)
 
 def ft_get_degree(ecuacion):
@@ -63,7 +64,7 @@ def ft_is_function(var):
         raise ValueError("Error in format")
     variable = parts[0].strip()
     expression = parts[1].strip()
-    if one_letter(expression) != 1:
+    if ft_one_letter(expression) != 1:
         return False
     
     # Find the variable dynamically

@@ -1,5 +1,6 @@
 from library import *
 from aux import *
+from function import *
 import re
 
 def ft_operate_numeric(expression):
@@ -76,33 +77,44 @@ def ft_operate_numeric(expression):
 
     return operandos[0]
 
-# re.sub busca todas las coincidencias de nombres de variables en la expresión y reemplazarlos con sus respectivos valores
-def replace_variables(expression):
-    print("INSIDE THE FUNCTION!")
-    pattern = r'\b\w+\b'  # Expresión regular para buscar nombres de variables
+def ft_replace_variables(var):
+    parts = var.split(' ')
+    if len(parts) == 0:
+        print("?????")
+        return
 
-    def replace(match):
-        variable_name = match.group()
-        variable_value = ft_find_variable(MyVar, variable_name)
-        return str(variable_value) if variable_value is not None else variable_name
+    new = []
+    for part in parts:
+        if part in variables:
+            new.append(variables[part].value)
+        else:
+            new.append(part)
+    result = ' '.join(new)
+    return result
 
-    modified_expression = re.sub(pattern, replace, expression)
-    return modified_expression
+def ft_isletter(var):
+    return any(caracter.isalpha() for caracter in var)
 
 def ft_separate(var):
     # Definir una expresión regular para buscar los símbolos como separadores
     pattern = r'\b\w+\b|[()+\-^*/%]'
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
-    print("tokens is: ", output_str)
     return output_str
 
 def ft_operate(var):
+    print("Inside operate :D")
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
     name = parts[0].strip()
     value = parts[1].strip() 
     separated = ft_separate(value)
-    replaced = replace_variables(separated)
-    print(replaced)
+    print(separated)
+    replaced = ft_replace_variables(separated)
+    print("REPLACED: ", replaced)
+    if ft_isletter(replaced) is False:
+        print("Inside one letter")
+        print("result: ", ft_operate_numeric(replaced))
+    else:
+        print("I cannot do that operation")
