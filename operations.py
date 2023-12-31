@@ -96,7 +96,7 @@ def ft_operate_numeric(expression):
 def ft_replace_variables(var):
     parts = var.split(' ')
     if len(parts) == 0:
-        print("?????")
+        print("WTF?????")
         return
 
     new = []
@@ -129,9 +129,6 @@ def ft_operate(var):
     separated = ft_separate(value)
     replaced = ft_replace_variables(separated)
     if ft_isletter(replaced) is False:
-        print("Inside one letter")
-        print("result: ", ft_operate_numeric(replaced))
-'''
+        print(ft_operate_numeric(replaced))
     else:
         print("I cannot do that operation")
-'''
