@@ -7,18 +7,25 @@ def ft_operate_numeric(expression):
     operandos = []
     operadores = []
     i = 0
+    negative = 0
+    nbr_neg = 0
+    print("Expression is: ", expression)
 
     while i < len(expression):
+        if i == 0 and expression[0] == '+':
+            i += 1
+        if i == 0 and expression[0] == '-':
+            negative = 1
+            nbr_neg = expression[2]
+            i += 1
         if expression[i].isdigit() or (i < len(expression) - 1 and expression[i] == '-' and expression[i + 1].isdigit()):
             # Extraer números (manejar números negativos)
-            print("INSIDE FIRST IF")
             inicio = i
             while i < len(expression) and (expression[i].isdigit() or expression[i] == '.'):
                 i += 1
             operandos.append(float(expression[inicio:i]))
 
         elif expression[i] in "+-*/":
-            print("INSIDE SECOND IF")
             # Manejar operadores
             while operadores and operadores[-1] in "*/" and (expression[i] in "+-"):
                 operador = operadores.pop()
@@ -62,13 +69,21 @@ def ft_operate_numeric(expression):
             i += 1
 
     while operadores:
-        operador = operadores.pop()
         operando2 = operandos.pop()
         operando1 = operandos.pop()
+        operador = operadores.pop()
         if operador == '+':
-            operandos.append(operando1 + operando2)
+            if negative == 1 and nbr_neg.strip() and operando1 == float(nbr_neg.strip()):
+                negative = 0
+                operandos.append(- operando1 + operando2)
+            else:
+                operandos.append(operando1 + operando2)
         elif operador == '-':
-            operandos.append(operando1 - operando2)
+            if negative == 1 and nbr_neg.strip() and operando1 == float(nbr_neg.strip()):
+                negative = 0
+                operandos.append(- operando1 - operando2)
+            else:
+                operandos.append(operando1 - operando2)
         elif operador == '*':
             operandos.append(operando1 * operando2)
         elif operador == '/':
@@ -76,7 +91,6 @@ def ft_operate_numeric(expression):
                 operandos.append(operando1 / operando2)
             else:
                 return "Error: No se puede dividir por cero."
-
     return operandos[0]
 
 def ft_replace_variables(var):
