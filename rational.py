@@ -3,9 +3,13 @@ from aux import *
 
 def ft_save_rational(var):
     var2 = var.split('=')
-    new_var = MyVar(var2[0], var2[1])
+    if len(var2) != 2:
+        return (False)
+    right = var2[1].strip()
+    replaced = ft_replace_variables(right)
+    new_var = MyVar(var2[0], replaced)
     variables[var2[0]] = new_var  # Add the new variable to the 'variables' dictionary
-    print(var2[1])
+    print(replaced)
     print(ft_find_variable(variables, var2[0]))
 
 def ft_is_rational_numer(var):
@@ -14,6 +18,7 @@ def ft_is_rational_numer(var):
     if len(var2) != 2:
         return (False)
     right_side = var2[1].strip()  # Elimina espacios en blanco alrededor
-    if right_side.isdigit():
+    replaced = ft_replace_variables(right_side)
+    if replaced.isdigit():
         return (True)
     return (False)

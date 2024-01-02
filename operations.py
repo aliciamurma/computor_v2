@@ -93,21 +93,6 @@ def ft_operate_numeric(expression):
                 return "Error: No se puede dividir por cero."
     return operandos[0]
 
-def ft_replace_variables(var):
-    parts = var.split(' ')
-    if len(parts) == 0:
-        print("WTF?????")
-        return
-
-    new = []
-    for part in parts:
-        if part in variables:
-            new.append(variables[part].value)
-        else:
-            new.append(part)
-    result = ' '.join(new)
-    return result
-
 def ft_isletter(var):
     return any(caracter.isalpha() for caracter in var)
 
@@ -130,5 +115,7 @@ def ft_operate(var):
     replaced = ft_replace_variables(separated)
     if ft_isletter(replaced) is False:
         print(ft_operate_numeric(replaced))
+    elif ft_one_letter(replace) is True:
+        print("No please, no.")
     else:
         print("I cannot do that operation")

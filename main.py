@@ -16,6 +16,9 @@ def ft_check_statement(statement):
         if len(var2) != 2:
             print("Error in syntax 1")
             return (False)
+        part0 = var2[0].strip()
+        if len(part0) == 1 and part0 == "i":
+            return (False)
     except:
         print("Error 2\n")
     return (True)
