@@ -1,7 +1,6 @@
 from library import *
-from aux import ft_find_variable
+from aux import *
 import re
-
 
 def ft_get_imaginary(var):
     # Patrón de expresión regular para buscar coeficientes imaginarios
@@ -44,22 +43,56 @@ def ft_print_imaginary(var):
 def ft_save_imaginary(var):
     print("Save imaginary: ", var)
     var2 = var.split('=')
-    new_var = MyVar(var2[0], var2[1])
+    right_side = var2[1].strip()  # Elimina espacios en blanco alrededor
+    right_side = ft_separate_i(right_side)
+    replaced = ft_replace_variables(right_side)
+    new_var = MyVar(var2[0], replaced)
     variables[var2[0]] = new_var  # Add the new variable to the 'variables' dictionary
-    ft_print_imaginary(var2[1])
+    ft_print_imaginary(replaced)
+
+def agrupar_terminos(cadena):
+    # Utilizamos expresiones regulares para separar los términos
+    terminos = re.findall(r'(-?\d*\.?\d*)?[ij]|\d+|-?\d*\.?\d*', cadena)
+    
+    # Inicializamos las partes real e imaginaria
+    parte_real = 0
+    parte_imaginaria = 0
+
+    # Iteramos sobre los términos y sumamos las partes real e imaginaria
+    for termino in terminos:
+        if 'i' in termino:
+            # Si el término contiene 'i', es parte imaginaria
+            parte_imaginaria += complex(0, float(termino.replace('i', '')))
+        else:
+            # Si no contiene 'i', es parte real
+            parte_real += float(termino)
+
+    # Formateamos el resultado
+    resultado = f"{parte_real} {'+' if parte_imaginaria.imag >= 0 else '-'} {abs(parte_imaginaria.imag)}i"
+
+    return resultado
+
+def ft_separate_i(var):
+    # Definir una expresión regular para buscar los símbolos como separadores
+    pattern = r'\b\w+\b|[()+\-^*/%]|i'
+    matches = re.findall(pattern, var)
+    output_str = ' '.join(matches)
+    return output_str
 
 def ft_is_imaginary(var):
     print("Inside is imaginary")
     var = var.split('=')
     if len(var) != 2:
         return False
-    if var[1].find("i") is -1:
+    right_side = var[1].strip()  # Elimina espacios en blanco alrededor
+    right_side = ft_separate_i(right_side)
+    replaced = ft_replace_variables(right_side)
+    if replaced.find("i") == -1:
         return False
-    parts = re.split(r'[-+]', var[1])
+    parts = re.split(r'[-+]', replaced)
     if len(parts) != 2:
         return False
-    
-    if var[1][-1] == 'i':
+    if replaced[-1] == 'i':
         real = parts[0].strip()
         imaginary = parts[1].strip()
     else:
