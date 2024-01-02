@@ -7,6 +7,7 @@ from function import *
 from aux import *
 from library import *
 from operations import *
+from interrogant import *
 
 variables = {}
 
@@ -16,15 +17,17 @@ def ft_check_statement(statement):
         if len(var2) != 2:
             print("Error in syntax 1")
             return (False)
-        part0 = var2[0].strip()
-        if len(part0) == 1 and part0 == "i":
+        part = var2[0].strip()
+        if len(part) == 1 and part == "i":
             return (False)
     except:
         print("Error 2\n")
     return (True)
 
 def ft_save_variable(var):
-    if ft_is_rational_numer(var):
+    if ft_ask_value(var):
+        ft_print_asked(var)
+    elif ft_is_rational_numer(var):
         ft_save_rational(var)
     elif ft_is_imaginary(var):
         ft_save_imaginary(var)
