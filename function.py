@@ -32,11 +32,16 @@ def ft_get_coeficients2(input):
     else:
         raise ValueError("Invalid format")
 
+def ft_is_correct_letter(expression, letter):
+    letters = ''.join(filter(str.isalpha, expression.lower()))
+    n_letters = set(letters)
+    if letter in n_letters:
+        return True
+    return False
 
 def ft_one_letter(expression):
     letters = filter(str.isalpha, expression.lower())
     n_letters = set(letters)
-    print("NUMBER OF LETTERS: ", n_letters)
     return len(n_letters)
 
 def ft_get_degree(ecuacion):
@@ -58,15 +63,23 @@ def ft_print_function(var):
     print(output_str)
 
 def ft_is_function(var):
+    global error
     print("Inside function")
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
     variable = parts[0].strip()
     expression = parts[1].strip()
-    if ft_one_letter(expression) != 1:
+    if not (len(variable) == 7 and variable[:3] == "fun" and variable[4] == "(" and variable[6] == ")" and variable[5].isalpha() and variable[3].isalpha()):
         return False
-    
+    if not ft_one_letter(expression):
+        error = 1
+        return False
+    if not ft_is_correct_letter(expression, variable[5]):
+        print("its not correct letter")
+        error = 1
+        return False
+
     # Find the variable dynamically
     variables = [c for c in expression if c.isalpha()]
     if not variables:

@@ -1,4 +1,5 @@
 from aux import *
+from library import *
 
 def ft_ask_value(var):
     var2 = var.split('=')

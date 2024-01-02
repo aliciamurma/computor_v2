@@ -22,6 +22,8 @@ def ft_replace_variables(var):
     result = ' '.join(new)
     return result
 
+def ft_impossible_letter(expression):
+    print("IMPOSSIBLE")
 
 def ft_is_sum(spaces):
     for element in spaces:

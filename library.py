@@ -1,7 +1,7 @@
 import numpy as np
 c_real = 0
 c_imag = 0
-
+error = 0
 variables = {}
 
 # Creamos un diccionario
