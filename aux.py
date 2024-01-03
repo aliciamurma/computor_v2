@@ -15,7 +15,6 @@ def ft_replace_variables(var):
     new = []
     for part in parts:
         if part in variables:
-            print(" is: ", variables[part].value)
             new.append(variables[part].value)
         else:
             new.append(part)

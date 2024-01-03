@@ -9,7 +9,6 @@ def ft_operate_numeric(expression):
     i = 0
     negative = 0
     nbr_neg = 0
-    print("Expression is: ", expression)
 
     while i < len(expression):
         if i == 0 and expression[0] == '+':
