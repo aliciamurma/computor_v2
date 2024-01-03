@@ -98,7 +98,10 @@ def ft_save_function(var):
     if len(parts) != 2:
         raise ValueError("Error in format")
     name = parts[0].strip()
-    value = parts[1].strip()
-    ft_print_function(value)
-    new_var = MyVar(name, value)
+    expression = parts[1].strip()
+    separated = ft_separate(expression)
+    replaced = ft_replace_variables(separated)
+    new_var = MyVar(name, replaced)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
+    real_value = ft_find_variable(variables, name)
+    print(real_value.value)

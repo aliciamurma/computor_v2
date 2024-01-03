@@ -19,11 +19,8 @@ def ft_replace_variables(var):
             new.append(str(variables[part].value))
         else:
             new.append(part)
-        print("new: ", new)
     result = ' '.join(new)
     return result
-
-def ft_impossible_letter(expression):
 
 def ft_is_sum(spaces):
     for element in spaces:
