@@ -14,15 +14,16 @@ def ft_replace_variables(var):
 
     new = []
     for part in parts:
+        part = part.strip()
         if part in variables:
-            new.append(variables[part].value)
+            new.append(str(variables[part].value))
         else:
             new.append(part)
+        print("new: ", new)
     result = ' '.join(new)
     return result
 
 def ft_impossible_letter(expression):
-    print("IMPOSSIBLE")
 
 def ft_is_sum(spaces):
     for element in spaces:
