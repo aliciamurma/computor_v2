@@ -124,7 +124,6 @@ def ft_save_function(var):
     incog, nbr = ft_separate_x_nbr(replaced)
     degree = ft_get_degree(incog)
     incog = ft_get_incognitas(incog, letter)
-    print("incog: ", incog)
     # operated = ft_operate_function(replaced)
     new_var = MyVar(name, replaced)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
@@ -138,7 +137,6 @@ def ft_get_incognitas(var, letter):
         aux = var[i].split(letter)
         nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
         degree = int(aux[1].strip().replace("^", "")) 
-        print("var: ", nbr)
         if degree in incog:
             incog[degree] += nbr
         else:
