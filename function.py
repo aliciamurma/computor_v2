@@ -108,22 +108,42 @@ def ft_pre_solve(var):
         var = a + var
     return var
 
+def ft_get_incognita_letter(name):
+    return name[5]
+
 def ft_save_function(var):
     parts = var.split('=')
     if len(parts) != 2:
         raise ValueError("Error in format")
     name = parts[0].strip()
     expression = parts[1].strip()
+    letter = ft_get_incognita_letter(name)
     separated = ft_separate(expression)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced)
     incog, nbr = ft_separate_x_nbr(replaced)
     degree = ft_get_degree(incog)
+    incog = ft_get_incognitas(incog, letter)
+    print("incog: ", incog)
     # operated = ft_operate_function(replaced)
     new_var = MyVar(name, replaced)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     real_value = ft_find_variable(variables, name)
     print(real_value.value)
+
+def ft_get_incognitas(var, letter):
+    incog = {}
+
+    for i in range(len(var)):
+        aux = var[i].split(letter)
+        nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
+        degree = int(aux[1].strip().replace("^", "")) 
+        print("var: ", nbr)
+        if degree in incog:
+            incog[degree] += nbr
+        else:
+            incog[degree] = nbr
+    return incog
 
 def ft_separate_x_nbr(var):
     incognitas = []
@@ -132,7 +152,6 @@ def ft_separate_x_nbr(var):
 
     # Definir una expresión regular para buscar los símbolos como separadores
     for i in range(len(var)):
-        print("bucle ", var[i])
 
         if "x" in var[i]:
             aux1 = var[i].strip()
@@ -147,7 +166,7 @@ def ft_get_degree(var):
 
     for i in range(len(var)):
         for j in range (len(var[i])):
-            if (var[i][j] is '^'):
+            if (var[i][j] == '^'):
                 j += 1
                 if max < int(var[i][j]):
                     max = int(var[i][j])
