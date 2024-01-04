@@ -118,9 +118,7 @@ def ft_save_function(var):
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced)
     incog, nbr = ft_separate_x_nbr(replaced)
-    print("incog: ", incog, "nbr: ", nbr)
     degree = ft_get_degree(incog)
-    print("DEGREE: ", degree)
     # operated = ft_operate_function(replaced)
     new_var = MyVar(name, replaced)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
@@ -150,15 +148,12 @@ def ft_get_degree(var):
     for i in range(len(var)):
         for j in range (len(var[i])):
             if (var[i][j] is '^'):
-                print("IF!")
                 j += 1
                 if max < int(var[i][j]):
-                    print("if")
                     max = int(var[i][j])
     if max == -1:
         return 1
     return max
-
 
 def ft_operate_function(expression):
     x = ft_separate_x(expression)
