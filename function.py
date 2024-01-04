@@ -124,11 +124,24 @@ def ft_save_function(var):
     incog, nbr = ft_separate_x_nbr(replaced)
     degree = ft_get_degree(incog)
     incog = ft_get_incognitas(incog, letter)
+    print("Before incog2. ", incog)
+    incog2 = ft_get_expression(incog)
     # operated = ft_operate_function(replaced)
-    new_var = MyVar(name, replaced)
+    new_var = MyVar(name, incog2 + nbr[0])
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     real_value = ft_find_variable(variables, name)
     print(real_value.value)
+
+def ft_get_expression(incog):
+    result = []  # Inicializa como lista vacía
+    for key, value in incog.items():
+        print("key:", key)
+        sign = '+' if key >= 0 else '-'  # Determina el signo del valor
+        aux = f"{value}x^{key}"  # f-strings para formatear la expresión
+        result.append(sign + aux)
+    result_str = ' '.join(result)  # Concatena mediante espacios
+    print("Result:", result_str)
+    return result_str
 
 def ft_get_incognitas(var, letter):
     incog = {}
