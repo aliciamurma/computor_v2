@@ -93,6 +93,21 @@ def ft_is_function(var):
     return False
     #ft_expression(expression)
 
+def ft_pre_solve(var):
+    var = var.replace("x ^", "x^")
+    var = var.replace("* x^", "x^")
+    var = var.replace(" x^", "x^")
+    var = var.replace("x^ ", "x^")
+    var = var.replace("+ ", "+")
+    var = var.replace("- ", "-")
+    var = var.replace("* ", "*")
+    var = var.replace("/ ", "/")
+    var = var.replace("% ", "%")
+    if var[0].isdigit:
+        a = "+"
+        var = a + var
+    return var
+
 def ft_save_function(var):
     parts = var.split('=')
     if len(parts) != 2:
@@ -101,7 +116,50 @@ def ft_save_function(var):
     expression = parts[1].strip()
     separated = ft_separate(expression)
     replaced = ft_replace_variables(separated)
+    replaced = ft_pre_solve(replaced)
+    incog, nbr = ft_separate_x_nbr(replaced)
+    print("incog: ", incog, "nbr: ", nbr)
+    degree = ft_get_degree(incog)
+    print("DEGREE: ", degree)
+    # operated = ft_operate_function(replaced)
     new_var = MyVar(name, replaced)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     real_value = ft_find_variable(variables, name)
     print(real_value.value)
+
+def ft_separate_x_nbr(var):
+    incognitas = []
+    nbr = []
+    var = var.split(' ')
+
+    # Definir una expresión regular para buscar los símbolos como separadores
+    for i in range(len(var)):
+        print("bucle ", var[i])
+
+        if "x" in var[i]:
+            aux1 = var[i].strip()
+            incognitas.append(aux1)
+        else:
+            aux2 = var[i].strip()
+            nbr.append(aux2)
+    return incognitas, nbr
+
+def ft_get_degree(var):
+    max = -1
+
+    for i in range(len(var)):
+        for j in range (len(var[i])):
+            if (var[i][j] is '^'):
+                print("IF!")
+                j += 1
+                if max < int(var[i][j]):
+                    print("if")
+                    max = int(var[i][j])
+    if max == -1:
+        return 1
+    return max
+
+
+def ft_operate_function(expression):
+    x = ft_separate_x(expression)
+    print("x: ", x)
