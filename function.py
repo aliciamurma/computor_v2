@@ -117,17 +117,19 @@ def ft_save_function(var):
         raise ValueError("Error in format")
     name = parts[0].strip()
     expression = parts[1].strip()
+
     letter = ft_get_incognita_letter(name)
     separated = ft_separate(expression)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced)
+    print("SEPARED BY CHUNKS IS: ", replaced)
     incog, nbr = ft_separate_x_nbr(replaced)
     degree = ft_get_degree(incog)
-    incog = ft_get_incognitas(incog, letter)
-    print("Before incog2. ", incog)
-    incog2 = ft_get_expression(incog)
+    func_dict = ft_get_dictionary(incog, nbr, letter)
+    print("Before incog2. ", func_dict)
+    saver = ft_get_expression(func_dict)
     # operated = ft_operate_function(replaced)
-    new_var = MyVar(name, incog2 + nbr[0])
+    new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     real_value = ft_find_variable(variables, name)
     print(real_value.value)
@@ -136,20 +138,24 @@ def ft_get_expression(incog):
     result = []  # Inicializa como lista vacía
     for key, value in incog.items():
         print("key:", key)
-        sign = '+' if key >= 0 else '-'  # Determina el signo del valor
+        sign = '+' if value >= 0 else ''  # Determina el signo del valor
         aux = f"{value}x^{key}"  # f-strings para formatear la expresión
         result.append(sign + aux)
     result_str = ' '.join(result)  # Concatena mediante espacios
     print("Result:", result_str)
     return result_str
 
-def ft_get_incognitas(var, letter):
+def ft_get_dictionary(var1, var2, letter):
     incog = {}
 
-    for i in range(len(var)):
-        aux = var[i].split(letter)
+    incog[0] = int(var2[0])
+    for i in range(len(var1)):
+        aux = var1[i].split(letter)
         nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
-        degree = int(aux[1].strip().replace("^", "")) 
+        if aux[1]:
+            degree = int(aux[1].strip().replace("^", "")) 
+        else:
+            degree = 1
         if degree in incog:
             incog[degree] += nbr
         else:
