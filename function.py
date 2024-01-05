@@ -147,8 +147,16 @@ def ft_get_expression(incog):
 
 def ft_get_dictionary(var1, var2, letter):
     incog = {}
+    number = [] 
 
-    incog[0] = int(var2[0])
+    print("var2: ", var2)
+    for i in range(len(var2)):
+        number.append(var2[i])
+    num_str = ''.join(number)
+    num = eval(num_str)
+    print("22")
+    incog[0] = num
+
     for i in range(len(var1)):
         aux = var1[i].split(letter)
         nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
