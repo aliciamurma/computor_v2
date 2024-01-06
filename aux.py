@@ -22,6 +22,11 @@ def ft_replace_variables(var):
     result = ' '.join(new)
     return result
 
+def ft_have_function(var):
+    if "fun" in var:
+        return True
+    return False
+
 def ft_is_sum(spaces):
     for element in spaces:
             if '+' in element:

@@ -129,10 +129,14 @@ def ft_save_function(var):
     print("Before incog2. ", func_dict)
     saver = ft_get_expression(func_dict)
     # operated = ft_operate_function(replaced)
+    name = name[:4] if len(name) >= 4 else name
     new_var = MyVar(name, saver)
+    print("name: ", name)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
+    print("check in the dictionary")
     real_value = ft_find_variable(variables, name)
-    print(real_value.value)
+    if real_value:
+        print(real_value.value)
 
 def ft_get_expression(incog):
     result = []  # Inicializa como lista vacía
@@ -142,24 +146,25 @@ def ft_get_expression(incog):
         aux = f"{value}x^{key}"  # f-strings para formatear la expresión
         result.append(sign + aux)
     result_str = ' '.join(result)  # Concatena mediante espacios
-    print("Result:", result_str)
     return result_str
 
 def ft_get_dictionary(var1, var2, letter):
     incog = {}
     number = [] 
 
-    print("var2: ", var2)
     for i in range(len(var2)):
         number.append(var2[i])
     num_str = ''.join(number)
-    num = eval(num_str)
-    print("22")
-    incog[0] = num
+    incog[0] = eval(num_str)
 
+    print("var1: ", var1)
     for i in range(len(var1)):
         aux = var1[i].split(letter)
-        nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
+        print("AUXX IS: ", aux)
+        if aux[0] and len(aux[0]) > 1:
+            nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
+        else:
+            nbr = +1
         if aux[1]:
             degree = int(aux[1].strip().replace("^", "")) 
         else:
