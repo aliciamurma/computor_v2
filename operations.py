@@ -130,13 +130,11 @@ def ft_replace_function(var):
     if ft_have_function(var) is True:
         print("We dont have this function in the dictionary")
         return "-1"
-    print("continue after ft_have_function")
     nbr = ft_get_nbr(var)
-    print("NBR IS: ", nbr)
     letter = ft_find_letter_function(var)
-    print("letter is: ", letter)
-    updated_var = var.replace(letter, str(nbr))
+    updated_var = var.replace(letter, " * " + str(nbr))
     updated_var = re.sub(r'\([^)]*\)', '', updated_var)
+    updated_var = updated_var.replace("^", " ** ")
     return updated_var
 
 
@@ -151,16 +149,14 @@ def ft_operate(var):
     separated = ft_separate(value)
     replaced = ft_replace_variables(separated)
     if ft_have_function(separated) is True:
-        print("have function: yes")
         replaced = ft_replace_function(replaced)
         print("here the replaced is: ", replaced)
         if replaced == '-1':
             return
         
-    print("separated: ", separated)
-    print("replaced: ", replaced)
     if ft_isletter(replaced) is False:
         operated = eval(replaced)
+        print("the  operate: ", operated)
         new_var = MyVar(name, operated)
         variables[name] = new_var
         value = ft_find_variable(variables, name)

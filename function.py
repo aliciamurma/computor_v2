@@ -143,7 +143,10 @@ def ft_get_expression(incog):
     for key, value in incog.items():
         print("key:", key)
         sign = '+' if value >= 0 else ''  # Determina el signo del valor
-        aux = f"{value}x^{key}"  # f-strings para formatear la expresión
+        if key != 0:
+            aux = f"{value}x^{key}"  # f-strings para formatear la expresión
+        else:
+            aux = f"{value}"
         result.append(sign + aux)
     result_str = ' '.join(result)  # Concatena mediante espacios
     return result_str

@@ -11,14 +11,41 @@ from interrogant import *
 
 variables = {}
 
+def ft_is_symbol(c):
+    if c == '?' or c == '+' or c == '-' or c == '%' or c == '/' or c == '^' or c == '*' or c == '[' or c == ']' or c == ',' or c == '.' or c == ';':
+        return True
+    return False
+
+def ft_grammar(var):
+    bracket = 0
+
+    for i in range(len(var)):
+        if var[i] == "(":
+            bracket += 1
+        if var[i] == ")":
+            bracket -= 1
+    if bracket != 0:
+        return False
+    for i in range(len(var)):
+        print("INSIDE FORRR")
+        if ft_is_symbol(var[i]) is False and var[i].isdigit() is False and var[i].isalpha() is False:
+            print("I HAVE... ", var[i])
+            return False
+    return True
+
 def ft_check_statement(statement):
     try:
         var2 = statement.split('=')
         if len(var2) != 2:
             print("Error in syntax 1")
             return (False)
-        part = var2[0].strip()
-        if len(part) == 1 and part == "i":
+        part1 = var2[0].strip()
+        part2 = var2[1].strip()
+        if len(part1) == 1 and part1 == "i":
+            print("Error in syntax 2")
+            return (False)
+        if ft_grammar(part1) is False or ft_grammar(part2) is False:
+            print("Error in syntax 2")
             return (False)
     except:
         print("Error 2\n")
