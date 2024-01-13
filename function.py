@@ -141,7 +141,6 @@ def ft_save_function(var):
 def ft_get_expression(incog):
     result = []  # Inicializa como lista vacía
     for key, value in incog.items():
-        print("key:", key)
         sign = '+' if value >= 0 else ''  # Determina el signo del valor
         if key != 0:
             aux = f"{value}x^{key}"  # f-strings para formatear la expresión
@@ -160,10 +159,8 @@ def ft_get_dictionary(var1, var2, letter):
     num_str = ''.join(number)
     incog[0] = eval(num_str)
 
-    print("var1: ", var1)
     for i in range(len(var1)):
         aux = var1[i].split(letter)
-        print("AUXX IS: ", aux)
         if aux[0] and len(aux[0]) > 1:
             nbr = int(aux[0].strip())  # Convertir el coeficiente a entero
         else:

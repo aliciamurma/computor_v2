@@ -155,6 +155,7 @@ def ft_operate(var):
             return
         
     if ft_isletter(replaced) is False:
+        replaced = replaced.replace("^", "**")
         operated = eval(replaced)
         print("the  operate: ", operated)
         new_var = MyVar(name, operated)

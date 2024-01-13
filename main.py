@@ -12,7 +12,7 @@ from interrogant import *
 variables = {}
 
 def ft_is_symbol(c):
-    if c == '?' or c == '+' or c == '-' or c == '%' or c == '/' or c == '^' or c == '*' or c == '[' or c == ']' or c == ',' or c == '.' or c == ';':
+    if c == '?' or c == '+' or c == '-' or c == '%' or c == '/' or c == '^' or c == '*' or c == '(' or c == ')' or c == '[' or c == ']' or c == ',' or c == '.' or c == ';':
         return True
     return False
 
@@ -27,9 +27,8 @@ def ft_grammar(var):
     if bracket != 0:
         return False
     for i in range(len(var)):
-        print("INSIDE FORRR")
         if ft_is_symbol(var[i]) is False and var[i].isdigit() is False and var[i].isalpha() is False:
-            print("I HAVE... ", var[i])
+            print("fails in.. ", var[i])
             return False
     return True
 
@@ -54,7 +53,7 @@ def ft_check_statement(statement):
 def ft_save_variable(var):
     if ft_ask_value(var):
         ft_print_asked(var)
-    elif ft_is_rational_numer(var):
+    elif ft_is_rational_number(var):
         ft_save_rational(var)
     elif ft_is_imaginary(var):
         ft_save_imaginary(var)

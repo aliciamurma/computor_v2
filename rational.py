@@ -12,7 +12,7 @@ def ft_save_rational(var):
     value = ft_find_variable(variables, var2[0])
     print(value.value)
 
-def ft_is_rational_numer(var):
+def ft_is_rational_number(var):
     print("Inside is rational")
     var2 = var.split('=')
     if len(var2) != 2:
