@@ -51,18 +51,24 @@ def ft_check_statement(statement):
     return (True)
 
 def ft_save_variable(var):
-    if ft_ask_value(var):
-        ft_print_asked(var)
-    elif ft_is_rational_number(var):
-        ft_save_rational(var)
-    elif ft_is_imaginary(var):
-        ft_save_imaginary(var)
-    elif ft_is_matrix(var):
-        ft_save_matrix(var)
-    elif ft_is_function(var):
-        ft_save_function(var)
+    var2 = var.split('=')
+    if len(var2) != 2:
+        print("ERROR!")
+        return
+    left = var2[0].strip()
+    right = var2[1].strip()
+    if ft_ask_value(left, right):
+        ft_print_asked(left, right)
+    elif ft_is_rational_number(left, right):
+        ft_save_rational(left, right)
+    elif ft_is_imaginary(left, right):
+        ft_save_imaginary(left, right)
+    elif ft_is_matrix(left, right):
+        ft_save_matrix(left, right)
+    elif ft_is_function(left, right):
+        ft_save_function(left, right)
     else:
-        ft_operate(var)
+        ft_operate(left, right)
 
 def ft_process_statement(statement):
     if ft_check_statement(statement):

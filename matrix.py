@@ -2,15 +2,10 @@
 from library import *
 from aux import ft_find_variable
 
-def ft_is_matrix(var):
+def ft_is_matrix(left, right):
     print("Inside is matrix")
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    variable = parts[0].strip()
-    expression = parts[1].strip()
-    if expression.startswith("[[") and expression.endswith("]]"):
-        filas = expression[2:-2].split("];[")  # Separate by ;
+    if right.startswith("[[") and right.endswith("]]"):
+        filas = right[2:-2].split("];[")  # Separate by ;
         el_first_row = filas[0].count(',') + 1
         
         for fila in filas:
@@ -43,15 +38,10 @@ def ft_print_matrix(var):
             print(num, end=" ")
         print("]")
 
-
-def ft_save_matrix(var):
+def ft_save_matrix(left, right):
     print("Save matrix")
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    name = parts[0].strip()
-    value = parts[1].strip() 
-    new_var = MyVar(name, value)
-    variables[name] = new_var  # Add the new variable to the 'variables' dictionary
-    #ft_find_variable(variables, name)
-    ft_print_matrix(var)
+    new_var = MyVar(left, right)
+    variables[left] = new_var  # Add the new variable to the 'variables' dictionary
+    value = ft_find_variable(variables, left)
+    print(value.value)
+    # ft_print_matrix(var)

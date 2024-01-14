@@ -62,31 +62,26 @@ def ft_print_function(var):
 
     print(output_str)
 
-def ft_is_function(var):
-    global error
-    print("Inside function")
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    variable = parts[0].strip()
-    expression = parts[1].strip()
-    if not (len(variable) == 7 and variable[:3] == "fun" and variable[4] == "(" and variable[6] == ")" and variable[5].isalpha() and variable[3].isalpha()):
+def ft_is_function(left, right):
+    print("Inside is function!")
+
+    if not (len(left) == 7 and left[:3] == "fun" and left[4] == "(" and left[6] == ")" and left[5].isalpha() and left[3].isalpha()):
         return False
-    if not ft_one_letter(expression):
+    if not ft_one_letter(right):
         error = 1
         return False
-    if not ft_is_correct_letter(expression, variable[5]):
+    if not ft_is_correct_letter(right, left[5]):
         print("its not correct letter")
         error = 1
         return False
 
     # Find the variable dynamically
-    variables = [c for c in expression if c.isalpha()]
+    variables = [c for c in right if c.isalpha()]
     if not variables:
         return False
     
     variable = variables[0]  # Take the first letter found as the variable
-    parameters = expression.split(variable)[1].split(":")[0]
+    parameters = right.split(variable)[1].split(":")[0]
     parameters = parameters.strip("()")
     num_parameters = len(parameters.split(","))  # Count the number of parameters
     return num_parameters > 0  # Verificar si hay al menos un parámetro
@@ -111,15 +106,10 @@ def ft_pre_solve(var):
 def ft_get_incognita_letter(name):
     return name[5]
 
-def ft_save_function(var):
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    name = parts[0].strip()
-    expression = parts[1].strip()
-
-    letter = ft_get_incognita_letter(name)
-    separated = ft_separate(expression)
+def ft_save_function(left, right):
+    print("save function")
+    letter = ft_get_incognita_letter(left)
+    separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced)
     print("SEPARED BY CHUNKS IS: ", replaced)
@@ -129,9 +119,9 @@ def ft_save_function(var):
     print("Before incog2. ", func_dict)
     saver = ft_get_expression(func_dict)
     # operated = ft_operate_function(replaced)
-    name = name[:4] if len(name) >= 4 else name
+    name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
-    print("name: ", name)
+    print("left: ", name)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     print("check in the dictionary")
     real_value = ft_find_variable(variables, name)

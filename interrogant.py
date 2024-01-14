@@ -1,13 +1,12 @@
 import re
 from aux import *
 from library import *
+from rational import *
+from matrix import *
+from function import *
 
-def ft_ask_value(var):
-    var2 = var.split('=')
-    if len(var2) != 2:
-        print("Error in syntax 1")
-        return (False)
-    part = var2[1].strip()
+def ft_ask_value(left, right):
+    part = right.strip()
     if len(part) == 1 and part == "?":
         return True
     return False
@@ -18,11 +17,14 @@ def ft_separate(var):
     output_str = ' '.join(matches)
     return output_str
 
-def ft_print_asked(var):
-    var2 = var.split('=')
-    asked = var2[0].strip()
-    separated = ft_separate(asked)
+def ft_print_asked(left, right):
+    separated = ft_separate(left)
     replaced = ft_replace_variables(separated)
     if ft_is_rational_number(replaced):
-        print ("rational")
-    print(replaced)
+        print(replaced)
+    elif ft_is_imaginary(replaced):
+        print("imaginary!")
+    elif ft_is_matrix(replaced):
+        print("matrix!")
+    elif ft_is_function(replaced):
+        print("function!")

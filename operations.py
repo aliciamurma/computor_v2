@@ -138,29 +138,23 @@ def ft_replace_function(var):
     return updated_var
 
 
-def ft_operate(var):
+def ft_operate(left, right):
     print("Inside operate :D")
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    name = parts[0].strip()
-    value = parts[1].strip()
-
-    separated = ft_separate(value)
+    separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     if ft_have_function(separated) is True:
         replaced = ft_replace_function(replaced)
         print("here the replaced is: ", replaced)
         if replaced == '-1':
             return
-        
+
     if ft_isletter(replaced) is False:
         replaced = replaced.replace("^", "**")
         operated = eval(replaced)
         print("the  operate: ", operated)
-        new_var = MyVar(name, operated)
-        variables[name] = new_var
-        value = ft_find_variable(variables, name)
+        new_var = MyVar(left, operated)
+        variables[left] = new_var
+        value = ft_find_variable(variables, left)
         print(value.value)
     elif ft_one_letter(replace) is True:
         print("No please, no.")

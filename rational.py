@@ -1,24 +1,16 @@
 from library import *
 from aux import *
 
-def ft_save_rational(var):
-    var2 = var.split('=')
-    if len(var2) != 2:
-        return (False)
-    right = var2[1].strip()
+def ft_save_rational(left, right):
     replaced = ft_replace_variables(right)
-    new_var = MyVar(var2[0], replaced)
-    variables[var2[0]] = new_var  # Add the new variable to the 'variables' dictionary
-    value = ft_find_variable(variables, var2[0])
+    new_var = MyVar(left, replaced)
+    variables[left] = new_var  # Add the new variable to the 'variables' dictionary
+    value = ft_find_variable(variables, left)
     print(value.value)
 
-def ft_is_rational_number(var):
+def ft_is_rational_number(left, right):
     print("Inside is rational")
-    var2 = var.split('=')
-    if len(var2) != 2:
-        return (False)
-    right_side = var2[1].strip()  # Elimina espacios en blanco alrededor
-    replaced = ft_replace_variables(right_side)
+    replaced = ft_replace_variables(right)
     if replaced.isdigit():
         return (True)
     return (False)
