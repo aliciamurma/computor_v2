@@ -20,11 +20,12 @@ def ft_separate(var):
 def ft_print_asked(left, right):
     separated = ft_separate(left)
     replaced = ft_replace_variables(separated)
-    if ft_is_rational_number(replaced):
+    print("replaced: ", replaced, "right: ", right)
+    if ft_is_rational_number(right, replaced):
         print(replaced)
-    elif ft_is_imaginary(replaced):
+    elif ft_is_imaginary(right, replaced):
         print("imaginary!")
-    elif ft_is_matrix(replaced):
+    elif ft_is_matrix(right, replaced):
         print("matrix!")
-    elif ft_is_function(replaced):
+    elif ft_is_function(right, replaced):
         print("function!")
