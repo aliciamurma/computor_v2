@@ -44,7 +44,6 @@ def ft_get_nbr(var):
         return 0
 
 def ft_is_imaginary(left, right):
-    print("inside is imaginary. right: ")
     right = right.replace("*i", "i")
     right = right.replace("* i", "i")
     separated = ft_separate_i(right)

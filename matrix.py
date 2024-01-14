@@ -23,13 +23,7 @@ def ft_is_matrix(left, right):
     return False
 
 def ft_print_matrix(var):
-    parts = var.split('=')
-    if len(parts) != 2:
-        raise ValueError("Error in format")
-    variable = parts[0].strip()
-    expression = parts[1].strip()
-    # Dividir cadena en listas de números
-    rows = [list(map(int, row.strip('[]').split(','))) for row in expression.split(';')]
+    rows = [list(map(int, row.strip('[]').split(','))) for row in var.split(';')]
 
     # Imprimir la matriz
     for row in rows:
@@ -42,6 +36,5 @@ def ft_save_matrix(left, right):
     print("Save matrix")
     new_var = MyVar(left, right)
     variables[left] = new_var  # Add the new variable to the 'variables' dictionary
-    value = ft_find_variable(variables, left)
-    print(value.value)
-    # ft_print_matrix(var)
+    # value = ft_find_variable(variables, left)
+    ft_print_matrix(right)

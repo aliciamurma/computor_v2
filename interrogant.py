@@ -2,8 +2,10 @@ import re
 from aux import *
 from library import *
 from rational import *
+from imaginary import *
 from matrix import *
 from function import *
+from operations import *
 
 def ft_ask_value(left, right):
     part = right.strip()
@@ -24,8 +26,10 @@ def ft_print_asked(left, right):
     if ft_is_rational_number(right, replaced):
         print(replaced)
     elif ft_is_imaginary(right, replaced):
-        print("imaginary!")
+        print(replaced)
     elif ft_is_matrix(right, replaced):
-        print("matrix!")
-    elif ft_is_function(right, replaced):
-        print("function!")
+        ft_print_matrix(replaced)
+    #elif ft_is_function(right, replaced):
+    #    print("function!")
+    else:
+        ft_operate(right, left)
