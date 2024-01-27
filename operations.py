@@ -131,6 +131,7 @@ def ft_replace_function(var):
         print("We dont have this function in the dictionary")
         return "-1"
     nbr = ft_get_nbr(var)
+    print("nbr is: ", nbr)
     letter = ft_find_letter_function(var)
     updated_var = var.replace(letter, " * " + str(nbr))
     updated_var = re.sub(r'\([^)]*\)', '', updated_var)

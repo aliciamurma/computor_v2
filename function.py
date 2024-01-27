@@ -9,28 +9,16 @@ def ft_second_degree(a, b, c):
     if discriminating > 0:
         x1 = (-b + math.sqrt(discriminating)) / (2*a)
         x2 = (-b - math.sqrt(discriminating)) / (2*a)
-        return f"Las soluciones de la ecuación son x1 = {x1} y x2 = {x2}"
+        return f"Two solutions: {x1} , {x2}"
     elif discriminating == 0:
         x = -b / (2*a)
-        return f"La solución de la ecuación es x = {x}"
+        return f"One solution: {x}"
     else:
         real = -b / (2*a)
         imaginary = math.sqrt(abs(discriminating)) / (2*a)
         solucion1 = f"{real} + {imaginary}i"
         solucion2 = f"{real} - {imaginary}i"
-        return f"Las soluciones de la ecuación son complejas: {solucion1} y {solucion2}"
-
-def ft_get_coeficients2(input):
-    # Extraer coeficientes usando expresiones regulares
-    match = re.match(r"([-+]?\d*)\s*\*\s*x\^2\s*([-+]?\d*)\s*\*\s*x\s*([-+]?\d*)\s*=\s*0", input)
-    
-    if match:
-        a = int(match.group(1)) if match.group(1) else 1
-        b = int(match.group(2)) if match.group(2) else 0
-        c = int(match.group(3)) if match.group(3) else 0
-        return a, b, c
-    else:
-        raise ValueError("Invalid format")
+        return f"Complex solutions: {solucion1}, {solucion2}"
 
 def ft_is_correct_letter(expression, letter):
     letters = ''.join(filter(str.isalpha, expression.lower()))
@@ -71,6 +59,9 @@ def ft_is_function(left, right):
         error = 1
         return False
     if not ft_is_correct_letter(right, left[5]):
+        if "?" in right :
+            print("THERE IS AN INTERROGANT!!!")
+            return True
         print("its not correct letter")
         error = 1
         return False
@@ -106,22 +97,44 @@ def ft_pre_solve(var):
 def ft_get_incognita_letter(name):
     return name[5]
 
+def ft_solve_equation(left, right):
+    separated = ft_separate(right)
+    if len(right) > 3:
+        print("No. Just no.")
+        return
+    replaced_r = ft_replace_variables(separated[0])
+    real_value = ft_find_variable(variables, left[:4])
+    if real_value:
+        print(real_value.value)
+
+    replaced = ft_pre_solve(real_value.value)
+    incog, nbr = ft_separate_x_nbr(replaced)
+    degree = ft_get_degree(incog)
+    if degree > 2:
+        print("I dont have to solve it, sorrrry")
+        return
+    equation = replaced + " = " + replaced_r
+    print(left[5])
+    func_dict = ft_get_dictionary(incog, nbr, left[5])
+    if degree == 2:
+        solved = ft_second_degree(func_dict.get(2, 0), func_dict.get(1, 0), func_dict.get(0, 0))
+        print(solved)
+
 def ft_save_function(left, right):
     print("save function")
+    if "?" in right:
+        ft_solve_equation(left, right)
+        return 
     letter = ft_get_incognita_letter(left)
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced)
-    print("SEPARED BY CHUNKS IS: ", replaced)
     incog, nbr = ft_separate_x_nbr(replaced)
     degree = ft_get_degree(incog)
     func_dict = ft_get_dictionary(incog, nbr, letter)
-    print("Before incog2. ", func_dict)
     saver = ft_get_expression(func_dict)
-    # operated = ft_operate_function(replaced)
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
-    print("left: ", name)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
     print("check in the dictionary")
     real_value = ft_find_variable(variables, name)
@@ -172,7 +185,6 @@ def ft_separate_x_nbr(var):
 
     # Definir una expresión regular para buscar los símbolos como separadores
     for i in range(len(var)):
-
         if "x" in var[i]:
             aux1 = var[i].strip()
             incognitas.append(aux1)
