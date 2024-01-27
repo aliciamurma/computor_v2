@@ -3,6 +3,10 @@ from library import *
 from aux import *
 from operations import *
 
+def ft_first_degree(b, c):
+    solve = b/c
+    return f"Solution: {solve}"
+
 def ft_second_degree(a, b, c):
     discriminating = b**2 - 4*a*c
 
@@ -42,8 +46,6 @@ def ft_get_degree(ecuacion):
     return max_exponente
 
 def ft_print_function(var):
-    #pattern = r'(\d*\*?x(?:\^\d+)?)|[-+*/%()]'
-    #pattern = r'(\d*\*?x(?:\^\d+)?)|[-+\*/%()]|\w+'
     pattern = r'\b\w+\b|[()+\-^*/%]'
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches) # Construir la cadena de salida uniendo los términos encontrados
@@ -118,6 +120,9 @@ def ft_solve_equation(left, right):
     func_dict = ft_get_dictionary(incog, nbr, left[5])
     if degree == 2:
         solved = ft_second_degree(func_dict.get(2, 0), func_dict.get(1, 0), func_dict.get(0, 0))
+        print(solved)
+    elif degree == 1:
+        solved = ft_first_degree(func_dict.get(1, 0), func_dict.get(0, 0))
         print(solved)
 
 def ft_save_function(left, right):
