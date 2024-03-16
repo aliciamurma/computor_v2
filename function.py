@@ -81,11 +81,13 @@ def ft_is_function(left, right):
     return False
     #ft_expression(expression)
 
-def ft_pre_solve(var):
-    var = var.replace("x ^", "x^")
-    var = var.replace("* x^", "x^")
-    var = var.replace(" x^", "x^")
-    var = var.replace("x^ ", "x^")
+def ft_pre_solve(var, incognita):
+    var = var.replace(f" *{incognita}", str(incognita))
+    var = var.replace(f"*{incognita}", str(incognita))
+    var = var.replace(f"* {incognita}", str(incognita))
+    var = var.replace(f"{incognita} ^", f"{incognita}^")
+    var = var.replace(f"{incognita}^ ", f"{incognita}^")
+    var = var.replace(f" {incognita}", f"{incognita}")
     var = var.replace("+ ", "+")
     var = var.replace("- ", "-")
     var = var.replace("* ", "*")
@@ -94,12 +96,14 @@ def ft_pre_solve(var):
     if var[0].isdigit:
         a = "+"
         var = a + var
+    print("MY PRESOLVE IS: ", var)
     return var
 
 def ft_get_incognita_letter(name):
     return name[5]
 
 def ft_solve_equation(left, right):
+    print("LEFT: ", left, "right: ", right)
     separated = ft_separate(right)
     if len(right) > 3:
         print("No. Just no.")
@@ -109,8 +113,9 @@ def ft_solve_equation(left, right):
     if real_value:
         print(real_value.value)
 
-    replaced = ft_pre_solve(real_value.value)
-    incog, nbr = ft_separate_x_nbr(replaced)
+    letter = ft_get_incognita_letter(left)
+    replaced = ft_pre_solve(real_value.value, letter)
+    incog, nbr = ft_separate_x_nbr(replaced, letter)
     degree = ft_get_degree(incog)
     if degree > 2:
         print("I dont have to solve it, sorrrry")
@@ -133,11 +138,13 @@ def ft_save_function(left, right):
     letter = ft_get_incognita_letter(left)
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
-    replaced = ft_pre_solve(replaced)
-    incog, nbr = ft_separate_x_nbr(replaced)
+    replaced = ft_pre_solve(replaced, letter)
+    incog, nbr = ft_separate_x_nbr(replaced, letter)
+    print("MY INCOGNIT IS: ", incog)
+    print("MY NBR IS: ", nbr)
     degree = ft_get_degree(incog)
     func_dict = ft_get_dictionary(incog, nbr, letter)
-    saver = ft_get_expression(func_dict)
+    saver = ft_get_expression(func_dict, letter)
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
@@ -146,12 +153,12 @@ def ft_save_function(left, right):
     if real_value:
         print(real_value.value)
 
-def ft_get_expression(incog):
+def ft_get_expression(incog, letter):
     result = []  # Inicializa como lista vacía
     for key, value in incog.items():
         sign = '+' if value >= 0 else ''  # Determina el signo del valor
         if key != 0:
-            aux = f"{value}x^{key}"  # f-strings para formatear la expresión
+            aux = f"{value}" + letter + f"^{key}"  # f-strings para formatear la expresión
         else:
             aux = f"{value}"
         result.append(sign + aux)
@@ -183,14 +190,14 @@ def ft_get_dictionary(var1, var2, letter):
             incog[degree] = nbr
     return incog
 
-def ft_separate_x_nbr(var):
+def ft_separate_x_nbr(var, letter):
     incognitas = []
     nbr = []
     var = var.split(' ')
 
     # Definir una expresión regular para buscar los símbolos como separadores
     for i in range(len(var)):
-        if "x" in var[i]:
+        if letter in var[i]:
             aux1 = var[i].strip()
             incognitas.append(aux1)
         else:
