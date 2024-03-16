@@ -11,6 +11,13 @@ def ft_save_rational(left, right):
 def ft_is_rational_number(left, right):
     print("Inside is rational")
     replaced = ft_replace_variables(right)
-    if replaced.isdigit():
+    try:
+        int(replaced)
         return (True)
+    except ValueError:
+        try:
+            float(replaced)
+            return (True)
+        except ValueError:
+            return (False)
     return (False)
