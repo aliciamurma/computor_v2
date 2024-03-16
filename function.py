@@ -91,12 +91,13 @@ def ft_pre_solve(var, incognita):
     var = var.replace("+ ", "+")
     var = var.replace("- ", "-")
     var = var.replace("* ", "*")
-    var = var.replace("/ ", "/")
-    var = var.replace("% ", "%")
+    var = var.replace("( ", "(")
+    var = var.replace(" )", ")")
     if var[0].isdigit:
-        a = "+"
-        var = a + var
-    print("MY PRESOLVE IS: ", var)
+        print("var[0] is: ", var[0])
+        if var[0] != '-':
+            a = "+"
+            var = a + var
     return var
 
 def ft_get_incognita_letter(name):
@@ -130,6 +131,12 @@ def ft_solve_equation(left, right):
         solved = ft_first_degree(func_dict.get(1, 0), func_dict.get(0, 0))
         print(solved)
 
+def ft_necessary_operation(expression):
+    if " / " in expression:
+        return True
+    if " * " in expression:
+        return True
+
 def ft_save_function(left, right):
     print("save function")
     if "?" in right:
@@ -139,12 +146,16 @@ def ft_save_function(left, right):
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced, letter)
-    incog, nbr = ft_separate_x_nbr(replaced, letter)
-    print("MY INCOGNIT IS: ", incog)
-    print("MY NBR IS: ", nbr)
-    degree = ft_get_degree(incog)
-    func_dict = ft_get_dictionary(incog, nbr, letter)
-    saver = ft_get_expression(func_dict, letter)
+    if ft_necessary_operation(replaced):
+        print("UNTIL HERE ", replaced)
+        saver = replaced
+    else:
+        incog, nbr = ft_separate_x_nbr(replaced, letter)
+        print("MY INCOGNIT IS: ", incog)
+        print("MY NBR IS: ", nbr)
+        degree = ft_get_degree(incog)
+        func_dict = ft_get_dictionary(incog, nbr, letter)
+        saver = ft_get_expression(func_dict, letter)
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
