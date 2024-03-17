@@ -29,7 +29,5 @@ def ft_print_asked(left, right):
         print(replaced)
     elif ft_is_matrix(right, replaced):
         ft_print_matrix(replaced)
-    #elif ft_is_function(right, replaced):
-    #    print("function!")
     else:
         ft_operate(right, left)
