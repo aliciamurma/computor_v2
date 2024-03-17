@@ -178,7 +178,7 @@ def ft_get_expression(incog, letter):
 
 def ft_get_dictionary(var1, var2, letter):
     incog = {}
-    number = [] 
+    number = []
 
     for i in range(len(var2)):
         number.append(var2[i])
@@ -201,6 +201,7 @@ def ft_get_dictionary(var1, var2, letter):
             incog[degree] = nbr
     return incog
 
+
 def ft_separate_x_nbr(var, letter):
     incognitas = []
     nbr = []
@@ -208,12 +209,15 @@ def ft_separate_x_nbr(var, letter):
 
     # Definir una expresión regular para buscar los símbolos como separadores
     for i in range(len(var)):
+        print("var[i] is: ", var[i])
         if letter in var[i]:
             aux1 = var[i].strip()
             incognitas.append(aux1)
         else:
             aux2 = var[i].strip()
+            print("aux2 is: ", aux2)
             nbr.append(aux2)
+            print("nbr is: ", nbr)
     return incognitas, nbr
 
 def ft_get_degree(var):
