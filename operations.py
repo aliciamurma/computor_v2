@@ -106,12 +106,10 @@ def ft_isletter(var):
     return any(caracter.isalpha() for caracter in var)
 
 def ft_separate(var):
-    print("IM GONNA SEPARATE: ", var)
     # Definir una expresión regular para buscar los símbolos como separadores
     pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]' # \d+\.\d+ coincide con números decimales
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
-    print("I HAVE SEPARATED: ", output_str)
     return output_str
 
 def ft_get_nbr(var):

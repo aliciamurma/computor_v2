@@ -131,11 +131,24 @@ def ft_solve_equation(left, right):
         solved = ft_first_degree(func_dict.get(1, 0), func_dict.get(0, 0))
         print(solved)
 
-def ft_necessary_operation(expression):
-    if " / " in expression:
-        return True
-    if " * " in expression:
-        return True
+def ft_necessary_operation_incognita(expression, incognita):
+    try:
+        var = expression.split('/')
+        part1 = var[0].strip()
+        part2 = var[1].strip()
+        if incognita in part1 and incognita in part2:
+            return True
+    except:
+        try:
+            var = expression.split('*')
+            part1 = var[0].strip()
+            part2 = var[1].strip()
+            if incognita in part1 and incognita in part2:
+                return True
+        except:
+            return False
+    return False
+
 
 def ft_save_function(left, right):
     print("save function")
@@ -146,10 +159,13 @@ def ft_save_function(left, right):
     separated = ft_separate(right)
     print("separated IS: ", separated)
     replaced = ft_replace_variables(separated)
+    print("replaced variables: ", replaced)
     replaced = ft_pre_solve(replaced, letter)
-    if ft_necessary_operation(replaced):
-        print("UNTIL HERE ", replaced)
-        saver = replaced
+    if ft_necessary_operation_incognita(replaced, letter):
+        new_separated = ft_separate(replaced)
+     #   incog, nbr = ft_separate_x_nbr(replaced, letter)
+        print("UNTIL HERE ", new_separated)
+        saver = new_separated
     else:
         incog, nbr = ft_separate_x_nbr(replaced, letter)
         print("MY INCOGNIT IS: ", incog)
