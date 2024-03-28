@@ -106,12 +106,25 @@ def ft_isletter(var):
     return any(caracter.isalpha() for caracter in var)
 
 def ft_separate(var):
+    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]' # \d+\.\d+ coincide con números decimales
+    matches = re.findall(pattern, var)
+    output_str = ' '.join(matches)
+
+    # Encuentra y separa los términos elevados a un exponente
+    matches_with_exponents = re.findall(r'\w+\s*\^\s*\d+', output_str)
+    for match in matches_with_exponents:
+        output_str = output_str.replace(match, ' ' + match + ' ')
+
+    return output_str
+
+'''
+def ft_separate(var):
     # Definir una expresión regular para buscar los símbolos como separadores
     pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]' # \d+\.\d+ coincide con números decimales
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
     return output_str
-
+'''
 def ft_get_nbr(var):
     var = var.split(' ')
     for i in range(len(var)):

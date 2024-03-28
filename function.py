@@ -131,25 +131,75 @@ def ft_solve_equation(left, right):
         solved = ft_first_degree(func_dict.get(1, 0), func_dict.get(0, 0))
         print(solved)
 
-def ft_necessary_operation_incognita(expression, incognita):
+def ft_necessary_operation_incognita(expression, letter):
+    print("INSIDE ft_necessary_operation_incognita: ", expression)
     try:
         var = expression.split('/')
         part1 = var[0].strip()
         part2 = var[1].strip()
-        if incognita in part1 and incognita in part2:
+        if letter in part1 and letter in part2:
             return True
     except:
         try:
             var = expression.split('*')
             part1 = var[0].strip()
             part2 = var[1].strip()
-            if incognita in part1 and incognita in part2:
+            if letter in part1 and letter in part2:
+                print("true 2")
                 return True
         except:
+            #Los parentesis es para preguntar si hay un parentesis (con su correspondiente /)
+            #\s* coincide con cero o más caracteres de espacio en blanco
+            #(\d+) coincide con 1 o más dígitos (0-9)
+            patron = r'\((.*?)\)\s*\^\s*(\d+)'
+            coincidences = re.findall(patron, expression)
+            print("coincidences: ", coincidences)
+            if coincidences:
+                for match in coincidences:
+                    operacion_elevada = match[0]
+                    potencia = int(match[1])
+                if letter in operacion_elevada:
+                    return True
             return False
     return False
 
+def ft_is_exponential(expression, letter):
+    print("INSIDE ft_is_exponential")
+    try:
+        patron = r'\((.*?)\)\s*\^\s*(\d+)'
+        coincidences = re.findall(patron, expression)
+        if coincidences:
+            for match in coincidences:
+                operacion_elevada = match[0]
+                potencia = int(match[1])
+            if letter in operacion_elevada:
+                return True
+    except:
+        return False
 
+def ft_solve_nbr_exponential(expression, letter):
+    print("INSIDE ft_solve_nbr_exponential")
+    resto = []
+    patron = r'\((.*?)\)\s*\^\s*(\d+)'
+
+    coincidences = re.findall(patron, expression)
+    if coincidences:
+        for match in coincidences:
+            operacion_elevada = match[0]
+            potencia = int(match[1])
+        if letter in operacion_elevada:
+            partes = re.split(patron, expression)
+            print("after split")
+            for i, parte in enumerate(partes):
+                if i % 2 == 0:  # Las partes pares contienen las partes que no cumplen el patrón
+                    if letter in parte:
+                        partes_no_coincidentes.append(parte.strip())
+                    elif i < len(partes) - 1:
+                        partes_no_coincidentes[-1] += parte.strip() + partes[i+1].strip()
+            print("RESTO: ", resto)
+            return resto
+    return "False"
+            
 def ft_save_function(left, right):
     print("save function")
     if "?" in right:
@@ -161,10 +211,10 @@ def ft_save_function(left, right):
     replaced = ft_replace_variables(separated)
     print("replaced variables: ", replaced)
     replaced = ft_pre_solve(replaced, letter)
+    replaced = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
     if ft_necessary_operation_incognita(replaced, letter):
-        new_separated = ft_separate(replaced)
-     #   incog, nbr = ft_separate_x_nbr(replaced, letter)
-        print("UNTIL HERE ", new_separated)
+        if ft_is_exponential(replaced, letter):
+            new_separated = ft_solve_nbr_exponential(replaced, letter)
         saver = new_separated
     else:
         incog, nbr = ft_separate_x_nbr(replaced, letter)
@@ -176,7 +226,6 @@ def ft_save_function(left, right):
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
-    print("check in the dictionary")
     real_value = ft_find_variable(variables, name)
     if real_value:
         print(real_value.value)
