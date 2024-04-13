@@ -97,7 +97,7 @@ def ft_pre_solve(var, incognita):
     var = var.replace(" )", ")")
     if var[0].isdigit:
         print("var[0] is: ", var[0])
-        if var[0] != '-':
+        if var[0] != '-' and var[0] != '+':
             a = "+"
             var = a + var
     return var
@@ -106,7 +106,6 @@ def ft_get_incognita_letter(name):
     return name[5]
 
 def ft_solve_equation(left, right):
-    print("LEFT: ", left, "right: ", right)
     separated = ft_separate(right)
     if len(right) > 3:
         print("No. Just no.")
@@ -118,7 +117,6 @@ def ft_solve_equation(left, right):
 
     letter = ft_get_incognita_letter(left)
     replaced = ft_pre_solve(real_value.value, letter)
-    print("AFTER PRE SOLVE: ", replaced)
     incog, nbr = ft_separate_x_nbr(replaced, letter)
     degree = ft_get_degree(incog)
     if degree > 2:
@@ -135,7 +133,6 @@ def ft_solve_equation(left, right):
         print(solved)
 
 def ft_necessary_operation_incognita(expression, letter):
-    print("INSIDE ft_necessary_operation_incognita: ", expression)
     try:
         var = expression.split('/')
         part1 = var[0].strip()
@@ -167,7 +164,6 @@ def ft_necessary_operation_incognita(expression, letter):
     return False
 
 def ft_is_exponential(expression, letter):
-    print("INSIDE ft_is_exponential")
     try:
         patron = r'\((.*?)\)\s*\^\s*(\d+)'
         coincidences = re.findall(patron, expression)
@@ -204,16 +200,19 @@ def ft_solve_not_exponential(expression, letter):
     except (IndexError, TypeError, ValueError) as e:
         print(f"Error: {e}")
     return False'''
+def replace_expr(match):
+    return ""
 
 def ft_separate_exponential(input_str, letter):
     input_str = input_str.replace(" ", "") # quitamos espacios
 
-    pattern = r'\((.*?)\)\^\d+'
+    #pattern = r'\((.*?)\)\^(\d+)'
+    pattern = r'([+-]\(.*?\)\^\d+)'
     match = re.search(pattern, input_str)
-    print("coincidences: ", match)
+
     if match:
-        extracted_expr = match.group(1)
-        str_rest = re.sub(extracted_expr, "", input_str)
+        extracted_expr = match.group(0)
+        str_rest = re.sub(pattern, replace_expr, input_str)
         return extracted_expr, str_rest
     return NULL
             
@@ -231,14 +230,21 @@ def ft_save_function(left, right):
         saver = replaced
         if ft_is_exponential(replaced2, letter):
             binomio, expression = ft_separate_exponential(replaced2, letter)
-            print("binomio: ", binomio)
-            print("expression: ", expression)
             expression = ft_separate(expression)
             binomio = ft_separate(binomio)
+            expression = ft_pre_solve(expression, letter)
+            binomio = ft_pre_solve(binomio, letter)
+           
             incog, nbr = ft_separate_x_nbr(expression, letter)
+            print("MY INCOGNIT IS: ", incog)
+            print("MY NBR IS: ", nbr)
             func_dict = ft_get_dictionary(incog, nbr, letter)
+            print("ft_get_dict")
             saver = ft_get_expression(func_dict, letter)
-            saver = saver.append(binomio)
+            print("ft_get_expression")
+            saver_list = saver.split()  # convierte la cadena en una lista de expresiones
+            saver_list.append(binomio) # añade el binomio a la lista
+            saver = ' '.join(saver_list) # volver a unir la lista en una cadena
             print("saver: ", saver)
     else:
         incog, nbr = ft_separate_x_nbr(replaced, letter)
