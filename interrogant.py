@@ -19,6 +19,7 @@ def ft_separate(var):
     output_str = ' '.join(matches)
     return output_str
 
+# CASO ESPECIAL PARA FUNCION
 def ft_print_asked(left, right):
     separated = ft_separate(left)
     replaced = ft_replace_variables(separated)
