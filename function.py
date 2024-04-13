@@ -82,9 +82,11 @@ def ft_is_function(left, right):
     #ft_expression(expression)
 
 def ft_pre_solve(var, incognita):
+    var = re.sub(r'\s+', ' ', var)
+    var = var.replace(f" * {incognita}", str(incognita))
+    var = var.replace(f"* {incognita}", str(incognita))
     var = var.replace(f" *{incognita}", str(incognita))
     var = var.replace(f"*{incognita}", str(incognita))
-    var = var.replace(f"* {incognita}", str(incognita))
     var = var.replace(f"{incognita} ^", f"{incognita}^")
     var = var.replace(f"{incognita}^ ", f"{incognita}^")
     var = var.replace(f" {incognita}", f"{incognita}")
@@ -116,6 +118,7 @@ def ft_solve_equation(left, right):
 
     letter = ft_get_incognita_letter(left)
     replaced = ft_pre_solve(real_value.value, letter)
+    print("AFTER PRE SOLVE: ", replaced)
     incog, nbr = ft_separate_x_nbr(replaced, letter)
     degree = ft_get_degree(incog)
     if degree > 2:
@@ -189,14 +192,12 @@ def ft_solve_nbr_exponential(expression, letter):
             potencia = int(match[1])
         if letter in operacion_elevada:
             partes = re.split(patron, expression)
-            print("after split")
             for i, parte in enumerate(partes):
                 if i % 2 == 0:  # Las partes pares contienen las partes que no cumplen el patrón
                     if letter in parte:
                         partes_no_coincidentes.append(parte.strip())
                     elif i < len(partes) - 1:
                         partes_no_coincidentes[-1] += parte.strip() + partes[i+1].strip()
-            print("RESTO: ", resto)
             return resto
     return "False"
             
@@ -211,11 +212,12 @@ def ft_save_function(left, right):
     replaced = ft_replace_variables(separated)
     print("replaced variables: ", replaced)
     replaced = ft_pre_solve(replaced, letter)
-    replaced = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
-    if ft_necessary_operation_incognita(replaced, letter):
-        if ft_is_exponential(replaced, letter):
-            new_separated = ft_solve_nbr_exponential(replaced, letter)
-        saver = new_separated
+    replaced2 = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
+    if ft_necessary_operation_incognita(replaced2, letter):
+        saver = replaced
+        if ft_is_exponential(replaced2, letter):
+            new_separated = ft_solve_nbr_exponential(replaced2, letter)
+            saver = new_separated
     else:
         incog, nbr = ft_separate_x_nbr(replaced, letter)
         print("MY INCOGNIT IS: ", incog)
