@@ -20,6 +20,7 @@ def ft_replace_variables(var):
         else:
             new.append(part)
     result = ' '.join(new)
+    print("the replaced is: ", result)
     return result
 
 def ft_have_function(var):

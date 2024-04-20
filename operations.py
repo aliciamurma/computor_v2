@@ -140,9 +140,11 @@ def ft_find_letter_function(var):
 
 def ft_replace_function(var):
     print("VAR IS: ", var)
+    '''
     if ft_have_function(var) is True:
         print("We dont have this function in the dictionary")
         return "-1"
+    ''' 
     nbr = ft_get_nbr(var)
     print("nbr is: ", nbr)
     letter = ft_find_letter_function(var)
@@ -151,14 +153,60 @@ def ft_replace_function(var):
     updated_var = updated_var.replace("^", " ** ")
     return updated_var
 
+def calculate_sum(functions, values):
+    total = 0
+    for i, fun in enumerate(functions):
+        total += fun(values[i])
+    return total
+
+def ft_replaced_incognitas(var):
+    parts = var.split(' ')
+    if len(parts) == 0:
+        print("WTF?????")
+        return
+    for part in parts:
+        part = part.strip()
+        if part in variables:
+            return str(variables[part].value)
+
+def ft_get_number_functions(var):
+    i = 0
+    count = 0
+
+    while i < len(var) - 3:  # Se resta 3 para evitar índices fuera de rango
+        if var[i:i+3] == "fun" and var[i+3].isalpha():
+            i = i + 3
+            count += 1
+        i += 1
+    print("umerp de veces encon trado: ", count)
+    return count
+
+def ft_chopping_functions(var):
+    print("entro en ft_chopping_functions")
+    # búsqueda: 'fun' + letra + '(' + dígito + ')'
+    #patron = r'fun\w\(\s*\d+\s*\)'
+    patron = r'fun\w\s*\(\s*\d+\s*\)'
+    partes = re.findall(patron, var) # finds *all* the matches and returns them as a list of strings
+    return partes
 
 def ft_operate(left, right):
     print("Inside operate :D")
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     if ft_have_function(separated) is True:
-        replaced = ft_replace_function(replaced)
-        print("here the replaced is: ", replaced)
+        nbr_funct = ft_get_number_functions(separated)
+        
+        i = 0
+        chopped = [None] * nbr_funct
+        chopped = ft_chopping_functions(separated)
+        print("chopped: ", chopped)
+        while i < nbr_funct:
+            print("entro: ", i)
+            replaced_function = ft_replace_function(ft_replace_variables(chopped[i]))
+            print("here the replaced is: ", replaced_function)
+            #calculate_sum(left, ft_replaced_incognitas(separated))
+            i += 1
+        #replaced = ft_replace_function(replaced)
         if replaced == '-1':
             return
 
