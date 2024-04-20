@@ -138,7 +138,7 @@ def ft_find_letter_function(var):
         if var[i].isalpha():
             return var[i]
 
-def ft_replace_function(var):
+def ft_replace_letter(var):
     print("VAR IS: ", var)
     '''
     if ft_have_function(var) is True:
@@ -189,26 +189,38 @@ def ft_chopping_functions(var):
     partes = re.findall(patron, var) # finds *all* the matches and returns them as a list of strings
     return partes
 
+def ft_replaced_function(var, letra):
+    patron = r'\(\s(\d+)\s\)'
+    # Utilizamos re.sub() para reemplazar 
+    new_replaced = re.sub(patron, f'({nuevo_numero})', var)
+    match = re.search(patron, var)
+    if match:
+        numero = match.group(1)  # Obtenemos el número capturado por la expresión regular
+        new_replaced = var.replace(letra, numero)
+        return new_replaced
+
 def ft_operate(left, right):
     print("Inside operate :D")
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
+    
     if ft_have_function(separated) is True:
         nbr_funct = ft_get_number_functions(separated)
         
         i = 0
+        result = []
         chopped = [None] * nbr_funct
         chopped = ft_chopping_functions(separated)
         print("chopped: ", chopped)
         while i < nbr_funct:
-            print("entro: ", i)
-            replaced_function = ft_replace_function(ft_replace_variables(chopped[i]))
-            print("here the replaced is: ", replaced_function)
-            #calculate_sum(left, ft_replaced_incognitas(separated))
+            print("chopped[i]: ", chopped[i])
+            replaced_function = ft_replace_letter(ft_replace_variables(chopped[i]))
+            print("ttthere the replaced is: ", replaced_function)
+            result.append(eval(replaced_function))
+            print("result: ", result)
             i += 1
-        #replaced = ft_replace_function(replaced)
-        if replaced == '-1':
-            return
+        print("OUT OF WHILE, BYE BYE")
+        return
 
     if ft_isletter(replaced) is False:
         replaced = replaced.replace("^", "**")
