@@ -225,41 +225,19 @@ def ft_save_function(left, right):
             expression = ft_pre_solve(expression, letter)
             binomio = ft_pre_solve(binomio, letter)
            
-            saver = ft_get_saver(expression, letter)
-            if saver is "ERROR":
-                return
-            '''
             incog, nbr = ft_separate_x_nbr(expression, letter)
-            if len(incog) is 0:
-                print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
-                return
             if len(nbr) is 0:
                 func_dict = ft_get_dictionary(incog, "0", letter)
             else:
                 func_dict = ft_get_dictionary(incog, nbr, letter)
-            print("MY INCOGNIT IS: ", incog)
-            print("MY NBR IS: ", nbr)
             saver = ft_get_expression(func_dict, letter)
-            '''
             saver_list = saver.split()  # convierte la cadena en una lista de expresiones
             saver_list.append(binomio) # añade el binomio a la lista
             saver = ' '.join(saver_list) # volver a unir la listaçen una cadena
     else:
         saver = ft_get_saver(replaced, letter)
-        '''
-        incog, nbr = ft_separate_x_nbr(replaced, letter)
-        if len(incog) is 0:
-            print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
+        if saver is "ERROR":
             return
-        if len(nbr) is 0:
-            func_dict = ft_get_dictionary(incog, "0", letter)
-        else:
-            func_dict = ft_get_dictionary(incog, nbr, letter)
-        print("MY INCOGNIT IS: ", incog)
-        print("MY NBR IS: ", nbr)
-        degree = ft_get_degree(incog)
-        saver = ft_get_expression(func_dict, letter)
-        '''
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
