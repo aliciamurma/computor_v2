@@ -58,15 +58,14 @@ def ft_is_function(left, right):
     if not (len(left) == 7 and left[:3] == "fun" and left[4] == "(" and left[6] == ")" and left[5].isalpha() and left[3].isalpha()):
         return False
     if not ft_one_letter(right):
-        error = 1
-        return False
+        print("Error!!")
+        return True
     if not ft_is_correct_letter(right, left[5]):
         if "?" in right :
             print("THERE IS AN INTERROGANT!!!")
             return True
-        print("its not correct letter")
-        error = 1
-        return False
+      #  print("its not correct letter")
+       # return False
 
     # Find the variable dynamically
     variables = [c for c in right if c.isalpha()]
@@ -176,30 +175,6 @@ def ft_is_exponential(expression, letter):
     except:
         return False
 
-'''
-def ft_solve_not_exponential(expression, letter):
-    print("SOLVE NOT EXPONENTIAL")
-    partes_no_coincidentes = []
-    patron = r'\((.*?)\)\s*\^\s*(\d+)'
-
-    try:
-        coincidences = re.findall(patron, expression)
-        if coincidences:
-            for match in coincidences:
-                operacion_elevada = match[0]
-                potencia = int(match[1])
-                if letter in operacion_elevada:
-                    partes = re.split(patron, expression)
-                    for i, parte in enumerate(partes):
-                        if i % 2 == 0:  
-                            if letter in parte:
-                                partes_no_coincidentes.append(parte.strip())
-                            elif i < len(partes) - 1:
-                                partes_no_coincidentes[-1] += parte.strip() + partes[i+1].strip()
-                    return partes_no_coincidentes
-    except (IndexError, TypeError, ValueError) as e:
-        print(f"Error: {e}")
-    return False'''
 def replace_expr(match):
     return ""
 
@@ -226,6 +201,9 @@ def ft_save_function(left, right):
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced, letter)
     replaced2 = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
+    if not ft_is_correct_letter(right, left[5]) and "?" not in right:
+        print("Error. It is not the correct letter")
+        return
     if ft_necessary_operation_incognita(replaced2, letter):
         saver = replaced
         if ft_is_exponential(replaced2, letter):
@@ -236,22 +214,31 @@ def ft_save_function(left, right):
             binomio = ft_pre_solve(binomio, letter)
            
             incog, nbr = ft_separate_x_nbr(expression, letter)
+            if len(incog) is 0:
+                print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
+                return
+            if len(nbr) is 0:
+                func_dict = ft_get_dictionary(incog, "0", letter)
+            else:
+                func_dict = ft_get_dictionary(incog, nbr, letter)
             print("MY INCOGNIT IS: ", incog)
             print("MY NBR IS: ", nbr)
-            func_dict = ft_get_dictionary(incog, nbr, letter)
-            print("ft_get_dict")
             saver = ft_get_expression(func_dict, letter)
-            print("ft_get_expression")
             saver_list = saver.split()  # convierte la cadena en una lista de expresiones
             saver_list.append(binomio) # añade el binomio a la lista
             saver = ' '.join(saver_list) # volver a unir la lista en una cadena
-            print("saver: ", saver)
     else:
         incog, nbr = ft_separate_x_nbr(replaced, letter)
+        if len(incog) is 0:
+            print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
+            return
+        if len(nbr) is 0:
+            func_dict = ft_get_dictionary(incog, "0", letter)
+        else:
+            func_dict = ft_get_dictionary(incog, nbr, letter)
         print("MY INCOGNIT IS: ", incog)
         print("MY NBR IS: ", nbr)
         degree = ft_get_degree(incog)
-        func_dict = ft_get_dictionary(incog, nbr, letter)
         saver = ft_get_expression(func_dict, letter)
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
@@ -276,10 +263,13 @@ def ft_get_dictionary(var1, var2, letter):
     incog = {}
     number = []
 
+    
     for i in range(len(var2)):
         number.append(var2[i])
     num_str = ''.join(number)
-    incog[0] = eval(num_str)
+    var2_value = eval(num_str)
+    if var2_value != 0:  # NO incluir var2 si es igual a 0
+        incog[0] = var2_value
 
     for i in range(len(var1)):
         aux = var1[i].split(letter)

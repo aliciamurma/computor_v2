@@ -11,6 +11,8 @@ def ft_save_rational(left, right):
 def ft_is_rational_number(left, right):
     print("Inside is rational")
     replaced = ft_replace_variables(right)
+    if (len(left) == 7 and left[:3] == "fun" and left[4] == "(" and left[6] == ")" and left[5].isalpha() and left[3].isalpha()):
+        return False
     try:
         int(replaced)
         return (True)
