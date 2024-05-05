@@ -139,19 +139,37 @@ def ft_find_letter_function(var):
             return var[i]
 
 def ft_replace_letter(var):
-    print("VAR IS: ", var)
-    '''
-    if ft_have_function(var) is True:
-        print("We dont have this function in the dictionary")
-        return "-1"
-    ''' 
+    i = 0
+    replaced = []
+    updated_var = ""
+    
     nbr = ft_get_nbr(var)
-    print("nbr is: ", nbr)
     letter = ft_find_letter_function(var)
-    updated_var = var.replace(letter, " * " + str(nbr))
-    updated_var = re.sub(r'\([^)]*\)', '', updated_var)
-    updated_var = updated_var.replace("^", " ** ")
-    return updated_var
+    print("nbr is: ", nbr)
+    print("The letter is: |", letter)
+    while i < len(var) - 5:
+        print("var i: ", var[i])
+        if (var[i] == '(' and i + 1 < len(var) and var[i + 1] == letter):
+            replaced.append(var[i])
+            replaced.append(letter)
+            i += 2
+        elif (var[i] == letter):
+            print("INSIDEEE")
+            replaced.append(" ")
+            replaced.append("*")
+            replaced.append(" ")
+            replaced.append(letter)
+            i += 1
+        else:
+            replaced.append(var[i])
+            i += 1
+    #updated_var = var.replace(letter, " * " + str(nbr))
+    #updated_var = re.sub(r'\([^)]*\)', '', updated_var)
+    replaced_str = ''.join(replaced)
+    replaced_str = replaced_str.replace("^", " ** ")
+    print("UPDATED VAR IS: ", replaced_str)
+    #replaced = replaced.replace("^", " ** ")
+    return replaced_str
 
 def calculate_sum(functions, values):
     total = 0
@@ -216,7 +234,9 @@ def ft_operate(left, right):
             print("chopped[i]: ", chopped[i])
             replaced_function = ft_replace_letter(ft_replace_variables(chopped[i]))
             print("ttthere the replaced is: ", replaced_function)
-            result.append(eval(replaced_function))
+            final_result = eval(replaced_function)
+            print("final result is: ", final_result)
+            result.append(final_result)
             print("result: ", result)
             i += 1
         print("OUT OF WHILE, BYE BYE")
