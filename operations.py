@@ -106,7 +106,8 @@ def ft_isletter(var):
     return any(caracter.isalpha() for caracter in var)
 
 def ft_separate(var):
-    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]' # \d+\.\d+ coincide con números decimales
+    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|[\[\]]' # \d+\.\d+ coincide con números decimales
+    #OJO que si hacemos re.findall me elimina los corchetes, y tendremos problemas con las matrices
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
 
@@ -227,12 +228,65 @@ def ft_replaced_function(var, letra):
         new_replaced = var.replace(letra, numero)
         return new_replaced
 
+def ft_operate_matrix_incognita(var):
+    print("la hemos jodido x2")
+
+def ft_get_size_matrix(matrix):
+    print("MY MATRIX SEEMS LIKE: ", matrix)
+
+def ft_suma_matrix(A, B):
+    if ft_get_size_matrix(A) == ft_get_size_matrix(B):
+        return [[A[i][j] + B[i][j] for j in range(len(A[0]))] for i in range(len(A))]
+
+def ft_resta_matrix(A, B):
+    if ft_get_size_matrix(A) == ft_get_size_matrix(B):
+        return [[A[i][j] - B[i][j] for j in range(len(A[0]))] for i in range(len(A))]
+
+def ft_multiplication_matrix(A, B):
+    resultado = [[0] * len(B[0]) for _ in range(len(A))]
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                resultado[i][j] += A[i][k] * B[k][j]
+    return resultado
+
+def ft_classify_operations(var):
+    result = matrices[0]
+    for i, operacion in enumerate(operations):
+        if i == '+':
+            ft_suma_matrix(result, matrices[i + 1])
+        if i == '-':
+            ft_suma_matrix(result, matrices[i + 1])
+        if i == '*':
+            ft_multiplication_matrix(result, matrices[i + 1])
+
+def ft_operate_matrix_numeric(var):
+    var = var.replace("[ ", '[')
+    var = var.replace(" ]", ']')
+    print("var as: ", var)
+    print("la hemos jodido x1")
+
+def ft_operate_matrix(var):
+    ft_operate_matrix_numeric(var)
+    #final_result = eval(var)
+    #print(final_result)
+
+def ft_necessary_operate_matrix(var):
+    print("var is: ", var)
+    for i in var:
+        if i == '[':
+            ft_operate_matrix(var)
+            return True
+    return False
+
 def ft_operate(left, right):
     print("Inside operate :D")
     separated = ft_separate(right)
+    print("SEPARATED: ", separated)
     replaced = ft_replace_variables(separated)
+    print("SEPARATED: ", separated)
     
-    if ft_have_function(separated) is True:
+    if ft_have_function(separated) == True:
         print("INSIDE ft_have_function\n")
         nbr_funct = ft_get_number_functions(separated)
         
@@ -261,30 +315,24 @@ def ft_operate(left, right):
         for i in range(len(result) - 1):  # Loop through range of indices
             print("INSIDE THE LOOP. Operators[i]: ", operators[i])
             operation = eval(f"{result[i]}{operators[i]}{result[i+1]}")
-        print("real result: ", operation)
-        '''
-        print("chopped2: ", chopped)
-        while i < nbr_funct:
-            print("chopped[i]: ", chopped[i])
-            replaced_function = ft_replace_letter(ft_replace_variables(chopped[i]))
-            #print("ttthere the replaced is: ", replaced_function)
-            final_result = eval(replaced_function)
-            #print("final result is: ", final_result)
-            result.append(final_result)
-            #print("result: ", result)
-            i += 1
-        '''
+        print(operation)
         return
 
-    if ft_isletter(replaced) is False:
+    if ft_necessary_operate_matrix(replaced) is True:
+        ft_operate_matrix(replaced)
+        print("Lets operate a matrix!!!")
+
+    if ft_isletter(replaced) == False:
         replaced = replaced.replace("^", "**")
         operated = eval(replaced)
-        print("the  operate: ", operated)
         new_var = MyVar(left, operated)
         variables[left] = new_var
         value = ft_find_variable(variables, left)
+        print("IT HAS BEEN SAVED!")
         print(value.value)
-    elif ft_one_letter(replace) is True:
-        print("No please, no.")
     else:
         print("I cannot do that operation")
+    '''
+    if ft_one_letter(replaced) == True:
+        print("Nope.")
+    '''

@@ -21,9 +21,10 @@ def ft_separate(var):
 
 # CASO ESPECIAL PARA FUNCION
 def ft_print_asked(left, right):
-    separated = ft_separate(left)
-    replaced = ft_replace_variables(separated)
-    print("replaced: ", replaced, "right: ", right)
+    replaced = ft_replace_variables(left)
+    if len(replaced) < 0:
+        separated = ft_separate(left)
+        replaced = ft_replace_variables(separated)
     if ft_is_rational_number(right, replaced):
         print(replaced)
     elif ft_is_imaginary(right, replaced):

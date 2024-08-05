@@ -34,7 +34,7 @@ def ft_grammar(var):
 
 def ft_not_alphadigit(part1):
     for char in part1:
-        if char.isdigit() is True or char.isalpha() is True:
+        if char.isdigit() is True or char.isalpha() is True or part1 == '?':
             return True
     return False
 
