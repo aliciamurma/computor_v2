@@ -28,9 +28,15 @@ def ft_grammar(var):
         return False
     for i in range(len(var)):
         if ft_is_symbol(var[i]) is False and var[i].isdigit() is False and var[i].isalpha() is False:
-            print("fails in.. ", var[i])
+            print("Fails in.. ", var[i])
             return False
     return True
+
+def ft_not_alphadigit(part1):
+    for char in part1:
+        if char.isdigit() is True or char.isalpha() is True:
+            return True
+    return False
 
 def ft_check_statement(statement):
     try:
@@ -40,12 +46,21 @@ def ft_check_statement(statement):
             return (False)
         part1 = var2[0].strip()
         part2 = var2[1].strip()
-        if len(part1) == 1 and part1 == "i":
+        if len(part1) == 0 or len(part2) == 0:
             print("Error in syntax 2")
+            return (False)
+        if len(part1) == 1 and part1 == "i":
+            print("Error in syntax 3")
             return (False)
         if ft_grammar(part1) is False or ft_grammar(part2) is False:
-            print("Error in syntax 2")
+            print("Error in syntax 4")
             return (False)
+        if part1.isalpha() is False and part1.isdigit() is True:
+            print("Error in syntax 6")
+            return False
+        if ft_not_alphadigit(part1) is False or ft_not_alphadigit(part2) is False:
+            print("Error in syntax 5")
+            return False
     except:
         print("Error 2\n")
     return (True)

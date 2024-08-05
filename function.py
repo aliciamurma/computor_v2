@@ -32,9 +32,17 @@ def ft_is_correct_letter(expression, letter):
     return False
 
 def ft_one_letter(expression):
-    letters = filter(str.isalpha, expression.lower())
-    n_letters = set(letters)
-    return len(n_letters)
+    print("?????\n")
+    try:
+        print("1\n")
+        letters = filter(str.isalpha, expression.lower())
+        print("2\n")
+        n_letters = set(letters)
+        print("3\n")
+        return len(n_letters)
+    except Exception as e:
+        print(f"Error evaluating expression {expression}: {e}")
+    return False
 
 def ft_get_degree(ecuacion):
     matches = re.findall(r"([-+]?\d*)\s*\*\s*x\^(\d+)", ecuacion) # Utiliza expresiones regulares para encontrar términos con exponentes    
@@ -193,10 +201,10 @@ def ft_separate_exponential(input_str, letter):
 
 def ft_get_saver(expression, letter):
     incog, nbr = ft_separate_x_nbr(expression, letter)
-    if len(incog) is 0:
+    if len(incog) == 0:
         print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
         return "ERROR"
-    if len(nbr) is 0:
+    if len(nbr) == 0:
         func_dict = ft_get_dictionary(incog, "0", letter)
     else:
         func_dict = ft_get_dictionary(incog, nbr, letter)
@@ -226,7 +234,7 @@ def ft_save_function(left, right):
             binomio = ft_pre_solve(binomio, letter)
            
             incog, nbr = ft_separate_x_nbr(expression, letter)
-            if len(nbr) is 0:
+            if len(nbr) == 0:
                 func_dict = ft_get_dictionary(incog, "0", letter)
             else:
                 func_dict = ft_get_dictionary(incog, nbr, letter)
@@ -236,7 +244,7 @@ def ft_save_function(left, right):
             saver = ' '.join(saver_list) # volver a unir la listaçen una cadena
     else:
         saver = ft_get_saver(replaced, letter)
-        if saver is "ERROR":
+        if saver == "ERROR":
             return
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
