@@ -38,6 +38,19 @@ def ft_not_alphadigit(part1):
             return True
     return False
 
+def ft_isclosed(part2):
+    stack = []
+    opening = {'(': ')', '[': ']', '{': '}'}
+    closing = {')', ']', '}'}
+
+    for char in part2:
+        if char in opening:
+            stack.append(char)
+        if char in closing:
+            if not stack or opening[stack.pop()] != char:
+                return False
+    return True
+
 def ft_check_statement(statement):
     try:
         var2 = statement.split('=')
@@ -56,10 +69,13 @@ def ft_check_statement(statement):
             print("Error in syntax 4")
             return (False)
         if part1.isalpha() is False and part1.isdigit() is True:
-            print("Error in syntax 6")
+            print("Error in syntax 5")
             return False
         if ft_not_alphadigit(part1) is False or ft_not_alphadigit(part2) is False:
-            print("Error in syntax 5")
+            print("Error in syntax 6, only special chars")
+            return False
+        if ft_isclosed(part2) is False or ft_isclosed(part1) is False:
+            print("Error in syntax 7, open-close")
             return False
     except:
         print("Error 2\n")
@@ -92,17 +108,18 @@ def ft_process_statement(statement):
         print("I don't understand it")
 
 def ft_start():
-    try:
-        while True:
+    while True:
+        try:
             prompt = input("Enter a statement: ")
             prompt = prompt.replace(' ','')
             while not prompt:
                 prompt = input("Enter a statement: ")
                 prompt = prompt.replace(' ','')
             ft_process_statement(prompt)
-    except:
-        print("I don't think that a calculator can do it...")
-
+        except:
+            print("I don't think that a calculator can do it...")
+        if prompt == "EXIT":
+            exit()
 
 def main(argv):
     if len(argv) == 1:

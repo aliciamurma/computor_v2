@@ -32,13 +32,9 @@ def ft_is_correct_letter(expression, letter):
     return False
 
 def ft_one_letter(expression):
-    print("?????\n")
     try:
-        print("1\n")
         letters = filter(str.isalpha, expression.lower())
-        print("2\n")
         n_letters = set(letters)
-        print("3\n")
         return len(n_letters)
     except Exception as e:
         print(f"Error evaluating expression {expression}: {e}")
@@ -89,11 +85,16 @@ def ft_is_function(left, right):
     #ft_expression(expression)
 
 def ft_pre_solve(var, incognita):
+    print("INSIDE PRE SOLVE")
     var = re.sub(r'\s+', ' ', var)
     var = var.replace(f" * {incognita}", str(incognita))
     var = var.replace(f"* {incognita}", str(incognita))
     var = var.replace(f" *{incognita}", str(incognita))
     var = var.replace(f"*{incognita}", str(incognita))
+    var = var.replace(f"{incognita} * ", str(incognita))
+    var = var.replace(f"{incognita} *", str(incognita))
+    var = var.replace(f"{incognita}* ", str(incognita))
+    var = var.replace(f"{incognita}*", str(incognita))
     var = var.replace(f"{incognita} ^", f"{incognita}^")
     var = var.replace(f"{incognita}^ ", f"{incognita}^")
     var = var.replace(f" {incognita}", f"{incognita}")
@@ -107,6 +108,7 @@ def ft_pre_solve(var, incognita):
         if var[0] != '-' and var[0] != '+':
             a = "+"
             var = a + var
+    print("var is: ", var)
     return var
 
 def ft_get_incognita_letter(name):
