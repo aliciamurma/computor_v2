@@ -145,26 +145,19 @@ def ft_replace_letter(var):
     
     nbr = ft_get_nbr(var)
     letter = ft_find_letter_function(var)
-    print("nbr is: ", nbr)
-    print("The letter is: |", letter)
     while i < len(var) - 5:
-        print("var i: ", var[i])
         if (var[i] == '(' and i + 1 < len(var) and var[i + 1] == letter):
             replaced.append(var[i])
-            replaced.append(letter)
-            i += 2
+            replaced.append(nbr)
+            i += 1
         elif (var[i] == letter):
-            print("INSIDEEE")
             replaced.append(" ")
             replaced.append("*")
             replaced.append(" ")
-            replaced.append(letter)
-            i += 1
+            replaced.append(nbr)
         else:
             replaced.append(var[i])
-            i += 1
-    #updated_var = var.replace(letter, " * " + str(nbr))
-    #updated_var = re.sub(r'\([^)]*\)', '', updated_var)
+        i += 1
     replaced_str = ''.join(replaced)
     replaced_str = replaced_str.replace("^", " ** ")
     print("UPDATED VAR IS: ", replaced_str)
@@ -199,13 +192,30 @@ def ft_get_number_functions(var):
     print("umerp de veces encon trado: ", count)
     return count
 
+# cuando tenemos entre parentesis un digito, queremos trocear cada incognita con su sustituto
 def ft_chopping_functions(var):
-    print("entro en ft_chopping_functions")
+    print("entro en ft_chopping_functions con: ", var)
+    patron = r'\(\s*\d+\s*\)'
+    partes = re.split(f'({patron})', var)
     # búsqueda: 'fun' + letra + '(' + dígito + ')'
-    #patron = r'fun\w\(\s*\d+\s*\)'
-    patron = r'fun\w\s*\(\s*\d+\s*\)'
-    partes = re.findall(patron, var) # finds *all* the matches and returns them as a list of strings
-    return partes
+    # patron = r'fun\w\(\s*\d+\s*\)'
+    # patron = r'fun\w\s*\(\s*\d+\s*\)'
+    # partes = re.findall(patron, var) # finds *all* the matches and returns them as a list of strings
+    # Unimos cada grupo que termine en un patrón
+    resultado = []
+    acumulador = ""
+
+    for parte in partes:
+        acumulador += parte
+        if re.search(patron, parte):
+            resultado.append([acumulador.strip()])  # Cada sublista contiene una porción completa
+            acumulador = ""
+
+    # Si queda algo sin agregar (por si no termina en un número entre paréntesis)
+    if acumulador:
+        resultado.append([acumulador.strip()])
+    print("EL RESULTADO DENTRO DE CHOPPING ES: ", resultado)
+    return resultado
 
 def ft_replaced_function(var, letra):
     patron = r'\(\s(\d+)\s\)'
@@ -223,23 +233,47 @@ def ft_operate(left, right):
     replaced = ft_replace_variables(separated)
     
     if ft_have_function(separated) is True:
+        print("INSIDE ft_have_function\n")
         nbr_funct = ft_get_number_functions(separated)
         
         i = 0
         result = []
-        chopped = [None] * nbr_funct
-        chopped = ft_chopping_functions(separated)
-        print("chopped: ", chopped)
+        operators = []
+        chopped = ft_chopping_functions(replaced)
+        # Recorremos cada sublista en chopped
+        for sublist in chopped:
+            for element in sublist:
+                print("elemento: ", element)
+                # aqui el problema, no replace letter
+                replaced_function = ft_replace_letter(ft_replace_variables(element))
+                if replaced_function and i != 0:
+                    operators.append(replaced_function[0])
+                print("replaced_function: ", replaced_function)
+                try:
+                    final_result = eval(replaced_function)
+                    result.append(final_result)
+                except Exception as e:
+                    print(f"Error evaluating expression {replaced_function}: {e}")
+                i += 1
+        print("RESULT: ", result)
+        i = 0
+        operation = result[i]
+        for i in range(len(result) - 1):  # Loop through range of indices
+            print("INSIDE THE LOOP. Operators[i]: ", operators[i])
+            operation = eval(f"{result[i]}{operators[i]}{result[i+1]}")
+        print("real result: ", operation)
+        '''
+        print("chopped2: ", chopped)
         while i < nbr_funct:
             print("chopped[i]: ", chopped[i])
             replaced_function = ft_replace_letter(ft_replace_variables(chopped[i]))
-            print("ttthere the replaced is: ", replaced_function)
+            #print("ttthere the replaced is: ", replaced_function)
             final_result = eval(replaced_function)
-            print("final result is: ", final_result)
+            #print("final result is: ", final_result)
             result.append(final_result)
-            print("result: ", result)
+            #print("result: ", result)
             i += 1
-        print("OUT OF WHILE, BYE BYE")
+        '''
         return
 
     if ft_isletter(replaced) is False:
