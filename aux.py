@@ -30,38 +30,55 @@ def ft_have_function(var):
 
 def ft_is_sum(spaces):
     for element in spaces:
-            if '+' in element:
-                return True  
+        if '+' in element:
+            return True  
     return False
 
 def ft_is_substraction(spaces):
     for element in spaces:
-            if '-' in element:
-                return True  
+        if '-' in element:
+            return True  
     return False
 
 def ft_is_residual(spaces):
     for element in spaces:
-            if '%' in element:
-                return True  
+        if '%' in element:
+            return True  
     return False
 
 def ft_is_div(spaces):
     for element in spaces:
-            if '/' in element:
-                return True  
+        if '/' in element:
+            return True  
     return False
 
 def ft_is_multi(spaces):
     for element in spaces:
-            if '*' in element:
-                return True  
+        if '*' in element:
+            return True  
+    return False
+
+def ft_is_symbol(c):
+    if c == '?' or c == '+' or c == '-' or c == '%' or c == '/' or c == '^' or c == '*' or c == '(' or c == ')' or c == '[' or c == ']' or c == ',' or c == '.' or c == ';':
+        return True
+    return False
+
+def ft_isoperator(spaces):
+    for element in spaces:
+        if ft_is_multi(element) is True or ft_is_div(element) is True or ft_is_residual(element) is True or ft_is_substraction(element) is True or ft_is_sum(element) is True:
+            return True  
     return False
 
 def ft_is_parenthesis_close(spaces):
     for element in spaces:
             if ')' in element:
                 return True  
+    return False
+
+def ft_not_alphadigit(part1):
+    for char in part1:
+        if char.isdigit() is True or char.isalpha() is True or part1 == '?':
+            return True
     return False
 
 def ft_is_parenthesis_open(spaces):

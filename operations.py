@@ -271,11 +271,10 @@ def ft_operate_matrix(var):
     #final_result = eval(var)
     #print(final_result)
 
-def ft_necessary_operate_matrix(var):
+def ft_have_matrix(var):
     print("var is: ", var)
-    for i in var:
-        if i == '[':
-            ft_operate_matrix(var)
+    for i in range(len(var) - 2):
+        if var[i] == '[' and var[i + 1] == ' ' and var[i + 2] == '[':
             return True
     return False
 
@@ -318,9 +317,9 @@ def ft_operate(left, right):
         print(operation)
         return
 
-    if ft_necessary_operate_matrix(replaced) is True:
-        ft_operate_matrix(replaced)
+    if ft_have_matrix(replaced) is True:
         print("Lets operate a matrix!!!")
+        ft_operate_matrix(replaced)
 
     if ft_isletter(replaced) == False:
         replaced = replaced.replace("^", "**")
