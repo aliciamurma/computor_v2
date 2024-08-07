@@ -118,6 +118,19 @@ def ft_separate(var):
 
     return output_str
 
+def ft_separate_new(var):
+    pattern = r'\b(?:\d+\.\d+|\d+|\w+)\b|[()+\-^*/%,]|[\[\]]' # \d+\.\d+ coincide con números decimales
+    #OJO que si hacemos re.findall me elimina los corchetes, y tendremos problemas con las matrices
+    matches = re.findall(pattern, var)
+    output_str = ' '.join(matches)
+
+    # Encuentra y separa los términos elevados a un exponente
+    matches_with_exponents = re.findall(r'\w+\s*\^\s*\d+', output_str)
+    for match in matches_with_exponents:
+        output_str = output_str.replace(match, ' ' + match + ' ')
+
+    return output_str
+
 '''
 def ft_separate(var):
     # Definir una expresión regular para buscar los símbolos como separadores

@@ -68,15 +68,18 @@ def ft_isclosed(part2):
     return True
 
 def ft_excessive_numbers(raw):
-    var = ft_separate(raw)
-    for i in range(len(var) - 2):
-        if var[i].isdigit() == True and var[i + 1] == ' ' and var[i + 2].isdigit() == True:
+    try:
+        var = ft_separate_new(raw)
+        for i in range(len(var) - 2):
+            if var[i].isdigit() == True and var[i + 1] == ' ' and var[i + 2].isdigit() == True:
+                return True
+        for i in range(len(var) - 2):
+            if ft_isoperator(var[i]) == True and var[i + 1] == ' ' and ft_isoperator(var[i + 2]) == True:
+                return True
+        if ft_isoperator(var[-1]) == True:
             return True
-    for i in range(len(var) - 2):
-        if ft_isoperator(var[i]) == True and var[i + 1] == ' ' and ft_isoperator(var[i + 2]) == True:
-            return True
-    if ft_isoperator(var[-1]) == True:
-        return True
+    except:
+        return False
     return False
 
 def ft_check_statement(statement):
@@ -87,6 +90,7 @@ def ft_check_statement(statement):
             return (False)
         part1 = var2[0].strip()
         part2 = var2[1].strip()
+        print("PART2 IS:", part2)
         if len(part1) == 0 or len(part2) == 0:
             print("Error in syntax 2, I need something before and after the equal")
             return (False)
@@ -108,9 +112,10 @@ def ft_check_statement(statement):
         if ft_isclosed(part2) is False or ft_isclosed(part1) is False:
             print("Error in syntax 7, open-close")
             return False
-        if ft_excessive_numbers(part2) is True or ft_excessive_numbers(part1):
-            print("Error in syntax 8, stranger things")
-            return False
+        if part2 != '?':
+            if ft_excessive_numbers(part2) is True or ft_excessive_numbers(part1):
+                print("Error in syntax 8, stranger things")
+                return False
     except:
         print("Error 2\n")
         return False
@@ -130,7 +135,8 @@ def ft_save_variable(var):
     elif ft_is_imaginary(left, right):
         ft_save_imaginary(left, right)
     elif ft_is_matrix(left, right):
-        ft_save_matrix(left, right)
+        if ft_is_correct_matrix(left, right):
+            ft_save_matrix(left, right)
     elif ft_is_function(left, right):
         ft_save_function(left, right)
     else:
