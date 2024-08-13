@@ -1,11 +1,13 @@
 
 from library import *
-from aux import ft_find_variable
+from aux import *
 
 def ft_is_matrix(left, right):
-    print("Inside is matrix")
-    if right.startswith("[[") and right.endswith("]]"):
+    replaced = ft_replace_variables(right)
+    print("Inside is matrix: ", replaced)
+    if replaced.startswith("[[") and replaced.endswith("]]"):
         return True
+    print("retornamos false")
     return False
 
 def ft_correct_rows(matrix):
@@ -47,12 +49,13 @@ def ft_square_matrix(matrix_raw):
     return True
 
 def ft_is_correct_matrix(left, right):
+    replaced = ft_replace_variables(right)
     print("inside ft_is_correct_matrix")
-    if ft_correct_rows(right) is False:
+    if ft_correct_rows(replaced) is False:
         print("Thats not a correct matrix bcof the rows")
         return False
 
-    if ft_square_matrix(right) is False:
+    if ft_square_matrix(replaced) is False:
         print("Thats not a correct matrix bc its not square")
         return False
     print("LETS GOOOO TO SAVE IT")
@@ -74,11 +77,12 @@ def ft_print_matrix(var):
         print("]")
 
 def ft_save_matrix(left, right):
+    replaced = ft_replace_variables(right)
     print("Save matrix")
-    new_var = MyVar(left, right)
+    new_var = MyVar(left, replaced)
     variables[left] = new_var  # Add the new variable to the 'variables' dictionary
     # value = ft_find_variable(variables, left)
-    ft_print_matrix(right)
+    ft_print_matrix(replaced)
 
 def ft_mutiplicatible_matrix(var):
     return True

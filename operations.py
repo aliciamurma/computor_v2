@@ -1,6 +1,7 @@
 from library import *
 from aux import *
 from function import *
+from matrix import *
 import re
 
 def ft_operate_numeric2(expression):
@@ -105,8 +106,9 @@ def ft_operate_numeric2(expression):
 def ft_isletter(var):
     return any(caracter.isalpha() for caracter in var)
 
-def ft_separate(var):
-    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|[\[\]]' # \d+\.\d+ coincide con números decimales
+def ft_separate1(var):
+    pattern = r'\[\[|\]\]|\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|[\[\]]'
+#    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|[\[\]]' # \d+\.\d+ coincide con números decimales
     #OJO que si hacemos re.findall me elimina los corchetes, y tendremos problemas con las matrices
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
@@ -118,8 +120,9 @@ def ft_separate(var):
 
     return output_str
 
-def ft_separate_new(var):
-    pattern = r'\b(?:\d+\.\d+|\d+|\w+)\b|[()+\-^*/%,]|[\[\]]' # \d+\.\d+ coincide con números decimales
+def ft_separate(var):
+    pattern = r'\[\[.*?\]\]|\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|,|[\[\]]'
+    #pattern = r'\b(?:\d+\.\d+|\d+|\w+)\b|[()+\-^*/%,]|[\[\]]' # \d+\.\d+ coincide con números decimales
     #OJO que si hacemos re.findall me elimina los corchetes, y tendremos problemas con las matrices
     matches = re.findall(pattern, var)
     output_str = ' '.join(matches)
@@ -131,14 +134,6 @@ def ft_separate_new(var):
 
     return output_str
 
-'''
-def ft_separate(var):
-    # Definir una expresión regular para buscar los símbolos como separadores
-    pattern = r'\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]' # \d+\.\d+ coincide con números decimales
-    matches = re.findall(pattern, var)
-    output_str = ' '.join(matches)
-    return output_str
-'''
 def ft_get_nbr(var):
     var = var.split(' ')
     for i in range(len(var)):
@@ -273,31 +268,123 @@ def ft_classify_operations(var):
         if i == '*':
             ft_multiplication_matrix(result, matrices[i + 1])
 
-def ft_operate_matrix_numeric(var):
-    var = var.replace("[ ", '[')
-    var = var.replace(" ]", ']')
-    print("var as: ", var)
-    print("la hemos jodido x1")
+# map(str, fila): Convierte cada elemento de la fila en una cadena.
+def ft_from_matrix_to_str(matrix):
+    filas_como_cadenas = ['[' + ','.join(map(str, fila)) + ']' for fila in matrix]
+    matrix_formato = '[' + ';'.join(filas_como_cadenas) + ']'
+    return matrix_formato
+
+# 1o miramos si hay una multiplicacion y una matrix
+# 2o miramos si la multiplicacion hace ref a un numero o una matriz
+def ft_operate_matrix_numeric1(raw):
+    retorno = ''
+    idx = 0
+    var = raw.split(' ')
+
+    # for idx, element in enumerate(var):
+    while idx < len(var):
+        element = var[idx]
+        if ft_is_matrix("fun", element) is True:
+            matrix_str = element.replace(";", ',')
+            matrix = np.array(eval(matrix_str))
+
+            # miramos si lo que tiene antes es una multiplicacion
+            if idx > 0 and var[idx - 1] == '*':
+                # si lo anterior es una matriz
+                if ft_is_matrix("fun", var[idx - 2]):
+                    previous_matrix = np.array(eval(var[idx - 2].replace(";", ',')))
+                    result = np.dot(previous_matrix, matrix)
+                else:
+                    # si lo anterior es un número
+                    result = float(var[idx - 2]) * matrix
+                print(f"Result of {var[idx - 2]} * {element}: {result}")
+                idx += 2
+            
+            # miramos si lo que tiene después es una multiplicacion 
+            elif idx < len(var) - 1 and var[idx + 1] == '*':
+                # si se multiplica por una matriz
+                if ft_is_matrix("fun", var[idx + 2]):
+                    next_matrix = np.array(eval(var[idx + 2].replace(";", ',')))
+                    result = np.dot(matrix, next_matrix)
+                # si se multiplica por un numero
+                else:
+                    # Si el siguiente es un número
+                    result = matrix * float(var[idx + 2])
+                print(f"Result of {element} * {var[idx + 2]}: {result}")
+                idx += 2
+            
+            print("antes de convertir")
+            # Convertimos el resultado de nuevo a la cadena
+            retorno += ft_from_matrix_to_str(result)
+        else:
+            retorno += element  # Concatenamos el elemento si no es matriz
+        idx += 1
+    return retorno
+
+def ft_operate_matrix_numeric(raw):
+    retorno = ''
+    idx = 0
+    nbr = 0
+    var = raw.split(' ')
+
+    # for idx, element in enumerate(var)
+    # nbr 0 for normal numbers --> EVAL
+    # nbr 1 for first matrix and then number 
+    # nbr 2 for first number and then matrix
+    # nbr 3 for both matrix 
+    while idx < len(var):
+        print("while..")
+        element = var[idx]
+        if idx > 0 and var[idx] == '*':
+            print("vamos a hacer una multiplicacion")
+            if ft_is_matrix("fun", var[idx - 1]) is True:
+                print("inside ft_is_matrix -1", var[idx - 1])
+                matrix_str = var[idx - 1].replace(";", ',')
+                matrix1 = np.array(eval(matrix_str))
+                nbr = 1
+            if ft_is_matrix("fun", var[idx + 1]) is True:
+                matrix_str = var[idx + 1].replace(";", ',')
+                matrix2 = np.array(eval(matrix_str))
+                if nbr == 1:
+                    nbr = 3
+                else:
+                    nbr = 2
+            if nbr == 3:
+                result = np.dot(matrix1, matrix2)
+            elif nbr == 1:
+                result = matrix1 * float(var[idx + 1])
+            elif nbr == 2:
+                result = matrix2 * float(var[idx - 1])
+            else:
+                retorno += element  # Concatenamos el elemento si no es matriz
+            # Convertimos el resultado de nuevo a la cadena
+            retorno += ft_from_matrix_to_str(result)
+            idx += 1
+        elif var[idx + 1] != '*':
+            retorno += element  # Concatenamos el elemento si no es matriz
+        idx += 1
+    return retorno
 
 def ft_operate_matrix(var):
-    ft_operate_matrix_numeric(var)
+    result = ft_operate_matrix_numeric(var)
+    print("RESULT: ", result)
     #final_result = eval(var)
     #print(final_result)
 
 def ft_have_matrix(var):
     print("var is: ", var)
     for i in range(len(var) - 2):
-        if var[i] == '[' and var[i + 1] == ' ' and var[i + 2] == '[':
+        if var[i] == '[' and var[i + 1] == '[':
             return True
     return False
 
 def ft_operate(left, right):
     print("Inside operate :D")
     separated = ft_separate(right)
-    print("SEPARATED: ", separated)
     replaced = ft_replace_variables(separated)
     print("SEPARATED: ", separated)
-    
+    print("REPLACED: ", replaced)
+
     if ft_have_function(separated) == True:
         print("INSIDE ft_have_function\n")
         nbr_funct = ft_get_number_functions(separated)
@@ -321,7 +408,6 @@ def ft_operate(left, right):
                 except Exception as e:
                     print(f"Error evaluating expression {replaced_function}: {e}")
                 i += 1
-        print("RESULT: ", result)
         i = 0
         operation = result[i]
         for i in range(len(result) - 1):  # Loop through range of indices
@@ -330,11 +416,11 @@ def ft_operate(left, right):
         print(operation)
         return
 
-    if ft_have_matrix(replaced) is True:
+    elif ft_have_matrix(replaced) is True:
         print("Lets operate a matrix!!!")
         ft_operate_matrix(replaced)
 
-    if ft_isletter(replaced) == False:
+    elif ft_isletter(replaced) == False:
         replaced = replaced.replace("^", "**")
         operated = eval(replaced)
         new_var = MyVar(left, operated)

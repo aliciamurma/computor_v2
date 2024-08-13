@@ -49,6 +49,6 @@ def ft_is_imaginary(left, right):
     separated = ft_separate_i(right)
     all_i = ft_get_i(separated)
     all_nbr = ft_get_nbr(separated)
-    if all_i != 0 and all_nbr != 0:
+    if all_i != 0: #and all_nbr != 0
         return True
     return False
