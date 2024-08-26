@@ -10,6 +10,7 @@ from operations import *
 def ft_ask_value(left, right):
     part = right.strip()
     if len(part) == 1 and part == "?":
+        print("yes, we are asking")
         return True
     return False
 
