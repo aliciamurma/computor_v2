@@ -238,28 +238,6 @@ def ft_replaced_function(var, letra):
         new_replaced = var.replace(letra, numero)
         return new_replaced
 
-def ft_operate_matrix_incognita(var):
-    print("la hemos jodido x2")
-
-def ft_get_size_matrix(matrix):
-    print("MY MATRIX SEEMS LIKE: ", matrix)
-
-def ft_suma_matrix(A, B):
-    if ft_get_size_matrix(A) == ft_get_size_matrix(B):
-        return [[A[i][j] + B[i][j] for j in range(len(A[0]))] for i in range(len(A))]
-
-def ft_resta_matrix(A, B):
-    if ft_get_size_matrix(A) == ft_get_size_matrix(B):
-        return [[A[i][j] - B[i][j] for j in range(len(A[0]))] for i in range(len(A))]
-
-def ft_multiplication_matrix(A, B):
-    resultado = [[0] * len(B[0]) for _ in range(len(A))]
-    for i in range(len(A)):
-        for j in range(len(B[0])):
-            for k in range(len(B)):
-                resultado[i][j] += A[i][k] * B[k][j]
-    return resultado
-
 def ft_classify_operations(var):
     result = matrices[0]
     for i, operacion in enumerate(operations):
@@ -337,7 +315,6 @@ def ft_operate_matrix_multip(raw):
                 retorno += element  # Concatenamos el elemento si no es matriz
             idx += 1
             print("IDX: ", idx)
-        print("LO QUE VAMOS A RETORNAR ES: ", retorno)
     except:
         print("We cannot operate this matrix")
         return "NP"
@@ -351,8 +328,6 @@ def ft_operate_matrix(var):
         return var
     print("RESULT: ", result)
     return result
-    #final_result = eval(var)
-    #print(final_result)
 
 def ft_have_matrix(var):
     print("var is: ", var)
@@ -383,7 +358,7 @@ def ft_operate_i(raw):
     except Exception as e:
         return f"Error en la operación: {e}"
 
-def ft_operate(left, right):
+def ft_operate(left, right, flag):
     print("Inside operate :D")
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
@@ -425,20 +400,20 @@ def ft_operate(left, right):
     elif ft_have_matrix(replaced) is True:
         print("Lets operate a matrix!!!")
         result = ft_operate_matrix(replaced)
-        ft_save_operation(left, result)
+        if flag is True:
+            ft_save_operation(left, result)
 
     elif ft_have_i(replaced) is True:
         result = ft_operate_i(replaced)
         print(result)
+        if flag is True:
+            ft_save_operation(left, result)
+            print("IT HAS BEEN SAVED!")
 
     elif ft_isletter(replaced) == False:
         replaced = replaced.replace("^", "**")
         operated = eval(replaced)
-        new_var = MyVar(left, operated)
-        variables[left] = new_var
-        value = ft_find_variable(variables, left)
-        print("IT HAS BEEN SAVED!")
-        print(value.value)
+        ft_save_operation(left, operated)
     else:
         print("I cannot do that operation")
     '''
