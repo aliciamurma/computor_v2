@@ -140,7 +140,7 @@ def ft_save_variable(var):
     elif ft_is_function(left, right):
         ft_save_function(left, right)
     else:
-        ft_operate(left, right)
+        ft_operate(left, right, True)
 
 def ft_process_statement(statement):
     if ft_check_statement(statement):

@@ -7,6 +7,7 @@ def ft_find_variable(dictionary, name):
     return None
 
 def ft_replace_variables(var):
+    print("Before replace:", var)
     parts = var.split(' ')
     if len(parts) == 0:
         print("WTF?????")

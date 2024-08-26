@@ -122,8 +122,9 @@ def ft_separate1(var):
     return output_str
 
 def ft_separate(var):
-    pattern = r'\[\[.*?\]\]|\b(?:\d+\.\d+|\w+)\b|[+\-^*/%]|,|[\[\]]'
-    #pattern = r'\[\[.*?\]\]|\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|,|[\[\]]'
+    pattern = r'\[\[.*?\]\]|\b(?:\d+\.\d+|\w+)\b|[()+\-^*/%]|,|[\[\]]'
+    #pattern = r'\[\[.*?\]\]|\b(?:\d+\.\d+|\w+)\b|[+\-^*/%]|,|[\[\]]'
+
     #pattern = r'\b(?:\d+\.\d+|\d+|\w+)\b|[()+\-^*/%,]|[\[\]]' # \d+\.\d+ coincide con números decimales
     #OJO que si hacemos re.findall me elimina los corchetes, y tendremos problemas con las matrices
     matches = re.findall(pattern, var)
@@ -133,6 +134,9 @@ def ft_separate(var):
     matches_with_exponents = re.findall(r'\w+\s*\^\s*\d+', output_str)
     for match in matches_with_exponents:
         output_str = output_str.replace(match, ' ' + match + ' ')
+
+    # Limpia espacios extra entre operadores y números
+    output_str = re.sub(r'\s+', ' ', output_str).strip()
 
     return output_str
 
@@ -208,14 +212,22 @@ def ft_chopping_functions(var):
     print("entro en ft_chopping_functions con: ", var)
     patron = r'\(\s*\d+\s*\)'
     partes = re.split(f'({patron})', var)
-    # búsqueda: 'fun' + letra + '(' + dígito + ')'
-    # patron = r'fun\w\(\s*\d+\s*\)'
-    # patron = r'fun\w\s*\(\s*\d+\s*\)'
-    # partes = re.findall(patron, var) # finds *all* the matches and returns them as a list of strings
-    # Unimos cada grupo que termine en un patrón
     resultado = []
     acumulador = ""
 
+    for parte in partes:
+        if re.search(patron, parte):
+            acumulador += parte.strip()  # Agregar la parte con el patrón
+            resultado.append([acumulador])  # Agregar al resultado
+            acumulador = ""  # Resetear el acumulador
+        else:
+            acumulador += parte  # Acumular partes sin el patrón
+
+    # Si queda algo sin agregar (por si no termina en un número entre paréntesis)
+    if acumulador:
+        resultado.append([acumulador.strip()])
+    return resultado
+'''
     for parte in partes:
         acumulador += parte
         if re.search(patron, parte):
@@ -226,7 +238,7 @@ def ft_chopping_functions(var):
     if acumulador:
         resultado.append([acumulador.strip()])
     print("EL RESULTADO DENTRO DE CHOPPING ES: ", resultado)
-    return resultado
+    r '''
 
 def ft_replaced_function(var, letra):
     patron = r'\(\s(\d+)\s\)'
@@ -359,7 +371,7 @@ def ft_operate_i(raw):
         return f"Error en la operación: {e}"
 
 def ft_operate(left, right, flag):
-    print("Inside operate :D")
+    print("Inside operate :D: ", right)
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     print("SEPARATED: ", separated)
@@ -378,10 +390,12 @@ def ft_operate(left, right, flag):
             for element in sublist:
                 print("elemento: ", element)
                 # aqui el problema, no replace letter
-                replaced_function = ft_replace_letter(ft_replace_variables(element))
+                replaced_function = ft_replace_letter(element)
+                #replaced_function = ft_replace_letter(ft_replace_variables(element))
+                print("replaced_function: ", replaced_function)
                 if replaced_function and i != 0:
                     operators.append(replaced_function[0])
-                print("replaced_function: ", replaced_function)
+
                 try:
                     final_result = eval(replaced_function)
                     result.append(final_result)
@@ -398,17 +412,14 @@ def ft_operate(left, right, flag):
         return
 
     elif ft_have_matrix(replaced) is True:
-        print("Lets operate a matrix!!!")
         result = ft_operate_matrix(replaced)
         if flag is True:
             ft_save_operation(left, result)
 
     elif ft_have_i(replaced) is True:
         result = ft_operate_i(replaced)
-        print(result)
         if flag is True:
             ft_save_operation(left, result)
-            print("IT HAS BEEN SAVED!")
 
     elif ft_isletter(replaced) == False:
         replaced = replaced.replace("^", "**")
