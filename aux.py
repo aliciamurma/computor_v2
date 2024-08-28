@@ -16,8 +16,13 @@ def ft_replace_variables(var):
     new = []
     for part in parts:
         part = part.strip()
+        # aqui tenemos que anadir algo para que cuando lo de antes es * / - , se aplique a toda la sustitucion
+        # pq quiza es solo un numero y no hace falta
+        #  pero quiza es una expresion matematica con incognitas O una funcion
         if part in variables:
+            #new.append("(")
             new.append(str(variables[part].value))
+            #new.append(")")
         else:
             new.append(part)
     result = ' '.join(new)

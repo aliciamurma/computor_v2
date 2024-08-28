@@ -2,6 +2,7 @@ import re
 from library import *
 from aux import *
 from operations import *
+from sympy import *
 
 def ft_first_degree(b, c):
     solve = b/c
@@ -86,29 +87,36 @@ def ft_is_function(left, right):
 
 def ft_pre_solve(var, incognita):
     print("INSIDE PRE SOLVE")
-    var = re.sub(r'\s+', ' ', var)
-    var = var.replace(f" * {incognita}", str(incognita))
-    var = var.replace(f"* {incognita}", str(incognita))
-    var = var.replace(f" *{incognita}", str(incognita))
-    var = var.replace(f"*{incognita}", str(incognita))
-    var = var.replace(f"{incognita} * ", str(incognita))
-    var = var.replace(f"{incognita} *", str(incognita))
-    var = var.replace(f"{incognita}* ", str(incognita))
-    var = var.replace(f"{incognita}*", str(incognita))
-    var = var.replace(f"{incognita} ^", f"{incognita}^")
-    var = var.replace(f"{incognita}^ ", f"{incognita}^")
-    var = var.replace(f" {incognita}", f"{incognita}")
-    var = var.replace("+ ", "+")
-    var = var.replace("- ", "-")
-    var = var.replace("* ", "*")
-    var = var.replace("( ", "(")
-    var = var.replace(" )", ")")
-    if var[0].isdigit:
-        print("var[0] is: ", var[0])
-        if var[0] != '-' and var[0] != '+':
-            a = "+"
-            var = a + var
-    print("var is: ", var)
+    print("var: ", var)
+    print("incognita: ", incognita)
+    try:
+        var = re.sub(r'\s+', ' ', var)
+        var = var.replace(f" * {incognita}", str(incognita))
+        var = var.replace(f"* {incognita}", str(incognita))
+        var = var.replace(f" *{incognita}", str(incognita))
+        var = var.replace(f"*{incognita}", str(incognita))
+        var = var.replace(f"{incognita} * ", str(incognita))
+        var = var.replace(f"{incognita} *", str(incognita))
+        var = var.replace(f"{incognita}* ", str(incognita))
+        var = var.replace(f"{incognita}*", str(incognita))
+        print("llega?")
+        var = var.replace(f"{incognita} ^", f"{incognita}^")
+        var = var.replace(f"{incognita}^ ", f"{incognita}^")
+        var = var.replace(f" {incognita}", f"{incognita}")
+        var = var.replace("+ ", "+")
+        var = var.replace("- ", "-")
+        var = var.replace("* ", "*")
+        var = var.replace("( ", "(")
+        var = var.replace(" )", ")")
+        print("before first if")
+        if var[0].isdigit:
+            print("var[0] is: ", var[0])
+            if var[0] != '-' and var[0] != '+':
+                a = "+"
+                var = a + var
+        print("var is: ", var)
+    except:
+        return var
     return var
 
 def ft_get_incognita_letter(name):
@@ -202,10 +210,11 @@ def ft_separate_exponential(input_str, letter):
     return NULL
 
 def ft_get_saver(expression, letter):
+    print("inside ft_get_saver")
     incog, nbr = ft_separate_x_nbr(expression, letter)
-    if len(incog) == 0:
-        print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
-        return "ERROR"
+    #if len(incog) == 0:
+    #    print("Error. There is not variables, save it with a rational variable, not a function, stupid.")
+    #    return "ERROR"
     if len(nbr) == 0:
         func_dict = ft_get_dictionary(incog, "0", letter)
     else:
@@ -222,11 +231,14 @@ def ft_save_function(left, right):
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced, letter)
+    print("After pre solve, replaced is:", replaced)
     replaced2 = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
+    print("After replaced2, which is: ", replaced2)
     if not ft_is_correct_letter(right, left[5]) and "?" not in right:
         print("Error. It is not the correct letter")
         return
     if ft_necessary_operation_incognita(replaced2, letter):
+        print("INSIDE ft_necessary_operation_incognita")
         saver = replaced
         if ft_is_exponential(replaced2, letter):
             binomio, expression = ft_separate_exponential(replaced2, letter)
@@ -237,6 +249,7 @@ def ft_save_function(left, right):
            
             incog, nbr = ft_separate_x_nbr(expression, letter)
             if len(nbr) == 0:
+                print("INSIDE NBR IS 0!!!!!, what else?")
                 func_dict = ft_get_dictionary(incog, "0", letter)
             else:
                 func_dict = ft_get_dictionary(incog, nbr, letter)
@@ -245,9 +258,28 @@ def ft_save_function(left, right):
             saver_list.append(binomio) # añade el binomio a la lista
             saver = ' '.join(saver_list) # volver a unir la listaçen una cadena
     else:
-        saver = ft_get_saver(replaced, letter)
-        if saver == "ERROR":
-            return
+        print("INSIDE ELSE")
+        print("Vamos a expandir: ", replaced)
+        # OJOOO, saver es un sympy.Expr, no una cadena!!!!
+        # Podemos utilizar subs en vez de replace
+        # Como despues tenemos que guardarlo, mejor lo convertimos rimero en cadena
+        saver1 = expand(replaced)
+        print("saver: ", saver1)
+        print("letter: ", letter)
+        saver = str(saver1)
+        saver = saver.replace(f" * {letter}", str(letter))
+        print("NI AL PRIMER REPLACE")
+        saver = saver.replace(f"* {letter}", str(letter))
+        saver = saver.replace(f" *{letter}", str(letter))
+        saver = saver.replace(f"*{letter}", str(letter))
+        saver = saver.replace(f"{letter} * ", str(letter))
+        saver = saver.replace(f"{letter} *", str(letter))
+        saver = saver.replace(f"{letter}* ", str(letter))
+        saver = saver.replace(f"{letter}*", str(letter))
+        print("result: ", saver)
+        #saver = ft_get_saver(result, letter)
+        #if saver == "ERROR":
+        #    return
     name = left[:4] if len(left) >= 4 else left
     new_var = MyVar(name, saver)
     variables[name] = new_var  # Add the new variable to the 'variables' dictionary
@@ -302,15 +334,18 @@ def ft_separate_x_nbr(var, letter):
     var = var.split(' ')
 
     # Definir una expresión regular para buscar los símbolos como separadores
-    for i in range(len(var)):
-        if letter in var[i]:
-            aux1 = var[i].strip()
-            incognitas.append(aux1)
-        else:
-            aux2 = var[i].strip()
-            print("aux2 is: ", aux2)
-            nbr.append(aux2)
-            print("nbr is: ", nbr)
+    try:
+        for i in range(len(var)):
+            if letter in var[i]:
+                aux1 = var[i].strip()
+                incognitas.append(aux1)
+            else:
+                aux2 = var[i].strip()
+                print("aux2 is: ", aux2)
+                nbr.append(aux2)
+                print("nbr is: ", nbr)
+    except:
+        return var
     return incognitas, nbr
 
 def ft_get_degree(var):
