@@ -26,10 +26,13 @@ def ft_second_degree(a, b, c):
         return f"Complex solutions: {solucion1}, {solucion2}"
 
 def ft_is_correct_letter(expression, letter):
+    print("inside ft_is_correct_letter")
     letters = ''.join(filter(str.isalpha, expression.lower()))
     n_letters = set(letters)
     if letter in n_letters:
+        print("returning true")
         return True
+    print("returning false")
     return False
 
 def ft_one_letter(expression):
@@ -67,7 +70,6 @@ def ft_is_function(left, right):
         return True
     if not ft_is_correct_letter(right, left[5]):
         if "?" in right :
-            print("THERE IS AN INTERROGANT!!!")
             return True
       #  print("its not correct letter")
        # return False
@@ -87,8 +89,6 @@ def ft_is_function(left, right):
 
 def ft_pre_solve(var, incognita):
     print("INSIDE PRE SOLVE")
-    print("var: ", var)
-    print("incognita: ", incognita)
     try:
         var = re.sub(r'\s+', ' ', var)
         var = var.replace(f" * {incognita}", str(incognita))
@@ -99,7 +99,6 @@ def ft_pre_solve(var, incognita):
         var = var.replace(f"{incognita} *", str(incognita))
         var = var.replace(f"{incognita}* ", str(incognita))
         var = var.replace(f"{incognita}*", str(incognita))
-        print("llega?")
         var = var.replace(f"{incognita} ^", f"{incognita}^")
         var = var.replace(f"{incognita}^ ", f"{incognita}^")
         var = var.replace(f" {incognita}", f"{incognita}")
@@ -108,7 +107,6 @@ def ft_pre_solve(var, incognita):
         var = var.replace("* ", "*")
         var = var.replace("( ", "(")
         var = var.replace(" )", ")")
-        print("before first if")
         if var[0].isdigit:
             print("var[0] is: ", var[0])
             if var[0] != '-' and var[0] != '+':
@@ -150,12 +148,14 @@ def ft_solve_equation(left, right):
         print(solved)
 
 def ft_necessary_operation_incognita(expression, letter):
+    # intentamos dividir
     try:
         var = expression.split('/')
         part1 = var[0].strip()
         part2 = var[1].strip()
         if letter in part1 and letter in part2:
             return True
+    # si no hay division, hay multiplicacion?
     except:
         try:
             var = expression.split('*')
@@ -164,20 +164,25 @@ def ft_necessary_operation_incognita(expression, letter):
             if letter in part1 and letter in part2:
                 print("true 2")
                 return True
+        #no hay multiplicacion ni division
         except:
-            #Los parentesis es para preguntar si hay un parentesis (con su correspondiente /)
-            #\s* coincide con cero o más caracteres de espacio en blanco
-            #(\d+) coincide con 1 o más dígitos (0-9)
-            patron = r'\((.*?)\)\s*\^\s*(\d+)'
-            coincidences = re.findall(patron, expression)
-            print("coincidences: ", coincidences)
-            if coincidences:
-                for match in coincidences:
-                    operacion_elevada = match[0]
-                    potencia = int(match[1])
-                if letter in operacion_elevada:
-                    return True
-            return False
+            try:
+                print("second except")
+                #Los parentesis es para preguntar si hay un parentesis (con su correspondiente /)
+                #\s* coincide con cero o más caracteres de espacio en blanco
+                #(\d+) coincide con 1 o más dígitos (0-9)
+                patron = r'\((.*?)\)\s*\^\s*(\d+)'
+                coincidences = re.findall(patron, expression)
+                print("coincidences: ", coincidences)
+                if coincidences:
+                    for match in coincidences:
+                        operacion_elevada = match[0]
+                        potencia = int(match[1])
+                    if letter in operacion_elevada:
+                        return True
+                return False
+            except:
+                return False
     return False
 
 def ft_is_exponential(expression, letter):
@@ -231,14 +236,13 @@ def ft_save_function(left, right):
     separated = ft_separate(right)
     replaced = ft_replace_variables(separated)
     replaced = ft_pre_solve(replaced, letter)
-    print("After pre solve, replaced is:", replaced)
     replaced2 = ft_separate(replaced) #Añadimos aqui un ft_separate para que en ft_necessary_operation_incognita me lo separe bien
     print("After replaced2, which is: ", replaced2)
     if not ft_is_correct_letter(right, left[5]) and "?" not in right:
         print("Error. It is not the correct letter")
         return
+    
     if ft_necessary_operation_incognita(replaced2, letter):
-        print("INSIDE ft_necessary_operation_incognita")
         saver = replaced
         if ft_is_exponential(replaced2, letter):
             binomio, expression = ft_separate_exponential(replaced2, letter)
@@ -258,17 +262,17 @@ def ft_save_function(left, right):
             saver_list.append(binomio) # añade el binomio a la lista
             saver = ' '.join(saver_list) # volver a unir la listaçen una cadena
     else:
-        print("INSIDE ELSE")
         print("Vamos a expandir: ", replaced)
         # OJOOO, saver es un sympy.Expr, no una cadena!!!!
         # Podemos utilizar subs en vez de replace
         # Como despues tenemos que guardarlo, mejor lo convertimos rimero en cadena
-        saver1 = expand(replaced)
+        try:
+            saver1 = expand(replaced)
+        except:
+            saver1 = replaced
         print("saver: ", saver1)
-        print("letter: ", letter)
         saver = str(saver1)
         saver = saver.replace(f" * {letter}", str(letter))
-        print("NI AL PRIMER REPLACE")
         saver = saver.replace(f"* {letter}", str(letter))
         saver = saver.replace(f" *{letter}", str(letter))
         saver = saver.replace(f"*{letter}", str(letter))

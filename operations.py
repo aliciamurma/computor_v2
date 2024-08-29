@@ -378,7 +378,6 @@ def ft_operate(left, right, flag):
     print("REPLACED: ", replaced)
 
     if ft_have_function(separated) == True:
-        print("INSIDE ft_have_function\n")
         nbr_funct = ft_get_number_functions(separated)        
         i = 0
         result = []
@@ -392,23 +391,23 @@ def ft_operate(left, right, flag):
                 replaced_function = ft_replace_letter(element)
                 #replaced_function = ft_replace_letter(ft_replace_variables(element))
                 print("replaced_function: ", replaced_function)
+                # miramos el signo que tiene, porque replaced_function[0] no tiene por que coger un negativo, 
+                # forma parte de la cadena, pero no del chopped
                 if replaced_function and i != 0:
                     operators.append(replaced_function[0])
 
-                try:
-                    final_result = eval(replaced_function)
-                    result.append(final_result)
-                except Exception as e:
-                    print(f"Error evaluating expression {replaced_function}: {e}")
+                if len(replaced_function) != 0:
+                    result.append(replaced_function)
+                else:
+
+                    result.append(element)
                 i += 1
-        i = 0
-        operation = result[i]
-        for i in range(len(result) - 1):  # Loop through range of indices
-            print("INSIDE THE LOOP. Operators[i]: ", operators[i])
-            operation = eval(f"{result[i]}{operators[i]}{result[i+1]}")
-        print(operation)
-        ft_save_operation(left, operation)
-        return
+        #juntar todo en una sola string para poder hacer eval
+        #NO juntar con "join", porque es una lista, no una cadena de texto
+        final_result = ' '.join(map(str, result))
+        operation = eval(final_result)            
+        print("RESULT IS: ", operation)
+        return operation
 
     elif ft_have_matrix(replaced) is True:
         result = ft_operate_matrix(replaced)

@@ -6,23 +6,36 @@ def ft_find_variable(dictionary, name):
             return value
     return None
 
-def ft_replace_variables(var):
-    print("Before replace:", var)
-    parts = var.split(' ')
-    if len(parts) == 0:
-        print("WTF?????")
-        return
-
-    new = []
+'''
     for part in parts:
         part = part.strip()
         # aqui tenemos que anadir algo para que cuando lo de antes es * / - , se aplique a toda la sustitucion
         # pq quiza es solo un numero y no hace falta
         #  pero quiza es una expresion matematica con incognitas O una funcion
         if part in variables:
+            print("REPLACING VAR... PART IS: ", part, "AND variables: ", variables[part].value)
             #new.append("(")
             new.append(str(variables[part].value))
             #new.append(")")
+        else:
+            new.append(part)
+    '''
+
+def ft_replace_variables(var):
+    parts = var.split(' ')
+    if len(parts) == 0:
+        print("WTF?????")
+        return
+    new = []
+    #enumerate te da el indice y el elemento en cada iteracion
+    for i, part in enumerate(parts):
+        part = part.strip() #quitamos espacios
+        print("0\n")
+        if part in variables:
+            value_str = str(variables[part].value)
+            if i > 0 and parts[i-1].strip() in ['*', '/', '-']: #si antes hay signo, ponemos parentesis
+                value_str = f"({value_str})"
+            new.append(value_str)
         else:
             new.append(part)
     result = ' '.join(new)
